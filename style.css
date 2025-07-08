@@ -59,7 +59,7 @@ body {
 .title {
     font-size: 1.3rem;
     color: var(--text-secondary);
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
 }
 
 .tagline {
