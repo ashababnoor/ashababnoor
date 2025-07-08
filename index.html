@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Shabab Noor - Data Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D4AA;
+            --dark-bg: #0d1117;
+            --text-primary: #ffffff;
+            --text-secondary: #c9d1d9;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 1rem 0;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #0077B5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        .name {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #58A6FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 0.5rem;
+        }
+
+        .location {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* About Section */
+        .about {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .code-block {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .keyword { color: #ff7b72; }
+        .type { color: #79c0ff; }
+        .string { color: #a5d6ff; }
+        .function { color: #d2a8ff; }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-category {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .skill-category h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Experience */
+        .experience-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .company {
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .duration {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .job-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .name {
+                font-size: 2.2rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="profile-img">SN</div>
+            <h1 class="name">Ahmed Shabab Noor</h1>
+            <p class="title">Data Engineer II @ Pathao</p>
+            <p class="tagline">Building scalable data products & backend systems with a focus on analytics and machine learning.</p>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="https://linkedin.com/in/ashababnoor" class="nav-link" target="_blank">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://github.com/ashababnoor" class="nav-link" target="_blank">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://scholar.google.com/citations?user=b6chKnEAAAAJ" class="nav-link" target="_blank">
+                <i class="fas fa-graduation-cap"></i> Google Scholar
+            </a>
+            <a href="mailto:ashababnoor@gmail.com" class="nav-link">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </nav>
+
+        <!-- About Section -->
+        <section class="section about">
+            <h2 class="section-title">About Me</h2>
+            <div class="code-block">
+<pre><span class="keyword">type</span> <span class="type">Developer</span> <span class="keyword">struct</span> {
+    <span class="string">Name</span>     <span class="type">string</span>   `json:"name"`
+    <span class="string">Role</span>     <span class="type">string</span>   `json:"role"`  
+    <span class="string">Focus</span>    []<span class="type">string</span> `json:"focus"`
+    <span class="string">Note</span>     <span class="type">string</span>   `json:"note"`
+}
+
+<span class="keyword">func</span> <span class="function">NewShabab</span>() <span class="type">Developer</span> {
+    <span class="keyword">return</span> <span class="type">Developer</span>{
+        <span class="string">Name</span>:    <span class="string">"Ahmed Shabab Noor"</span>,
+        <span class="string">Role</span>:    <span class="string">"Data Engineer II at Pathao"</span>,
+        <span class="string">Focus</span>:   []<span class="type">string</span>{<span class="string">"Data"</span>, <span class="string">"Backend"</span>, <span class="string">"Analytics"</span>, <span class="string">"AI & ML"</span>, <span class="string">"Building Scalable Systems"</span>},
+        <span class="string">Note</span>:    <span class="string">"Professional work on company's self-hosted GitLab, personal projects on GitHub"</span>,
+    }
+}</pre>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="section">
+            <h2 class="section-title">Experience</h2>
+            <div class="experience-item">
+                <div class="job-title">Data Engineer II</div>
+                <div class="company"><a href="https://pathao.com/?lang=en" target="_blank" style="color: var(--primary-color); text-decoration: none;">Pathao</a></div>
+                <div class="duration">Current Role</div>
+                <div class="job-description">
+                    Specializing in data engineering, backend development, and analytics engineering. 
+                    Building scalable data pipelines and systems to support data-driven decision making 
+                    across the organization.
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Go</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Bash</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Data & Analytics</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">dbt</span>
+                        <span class="skill-tag">BigQuery</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                        <span class="skill-tag">Matplotlib</span>
+                        <span class="skill-tag">Jupyter</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Databases</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">PostgreSQL</span>
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Redis</span>
+                        <span class="skill-tag">Neo4j</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Cloud & DevOps</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Google Cloud Platform</span>
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">Kubernetes</span>
+                        <span class="skill-tag">GitLab CI</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Analytics Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Redash</span>
+                        <span class="skill-tag">Looker Studio</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Development Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">VS Code</span>
+                        <span class="skill-tag">Postman</span>
+                        <span class="skill-tag">Linux</span>
+                        <span class="skill-tag">macOS</span>
+                        <span class="skill-tag">Windows</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Ahmed Shabab Noor. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
