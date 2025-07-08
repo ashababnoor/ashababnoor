@@ -8,19 +8,15 @@
 type Developer struct {
     Name     string   `json:"name"`
     Role     string   `json:"role"`  
-    Company  string   `json:"company"`
     Focus    []string `json:"focus"`
-    Tech     []string `json:"tech"`
     Note     string   `json:"note"`
 }
 
 func NewShabab() Developer {
     return Developer{
         Name:    "Ahmed Shabab Noor",
-        Role:    "Data Engineer II",
-        Company: "Pathao",
-        Focus:   []string{"Backend Engineering", "Data Engineering", "Analytics Engineering", "Data Science & Analytics", "AI & Machine Learning", "Building Scalable Systems"},
-        Tech:    []string{"Go", "Python", "SQL", "BigQuery", "dbt", "GCP", "Docker", "Kubernetes"},
+        Role:    "Data Engineer II at Pathao",
+        Focus:   []string{"Data", "Backend", "Analytics", "AI & ML", "Building Scalable Systems"},
         Note:    "Professional work on company's self-hosted GitLab, personal projects on GitHub",
     }
 }
@@ -90,12 +86,9 @@ func NewShabab() Developer {
   <img src="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake-dark.svg" alt="Snake animation" />
 </div> -->
 
-
-<div align="center">
+<!-- <div align="center">
 <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=dark" alt="Random Dev Quote"/>
-</div>
-
-### 
+</div> -->
 
 <div align="center">
 
