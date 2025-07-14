@@ -97,5 +97,6 @@ func NewShabab() Developer {
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/ashababnoor)
 [![Google Scholar](https://img.shields.io/badge/-Google%20Scholar-4285F4?style=flat&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=b6chKnEAAAAJ)
 ![Profile Views](https://komarev.com/ghpvc/?username=ashababnoor&color=blue&style=flat&label=Views)
+[![Buy Me a Coffee](https://img.shields.io/badge/-Buy%20Me%20a%20Coffee-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://pathaopay.me/@shabab.pay/500?ref=-HNrpcTHTA5vL9CnfPA3Eg)
 
 </div>
