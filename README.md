@@ -1,24 +1,42 @@
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=26&weight=700&duration=2800&pause=2000&color=00D4AA&center=true&vCenter=true&width=800&lines=Hey+there!+I'm+Shabab+%F0%9F%91%8B;Data+Engineer+%40+Pathao;Building+scalable+data+%26+backend+systems!+%F0%9F%9A%80" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=26&weight=700&duration=2800&pause=2000&color=00D4AA&center=true&vCenter=true&width=800&lines=Hey+there!+I'm+Shabab+%F0%9F%91%8B;Software+Engineer+L-3+at+Fin.com;Previously+Data+Engineer+L-2+at+Pathao;Building+scalable+data+%26+backend+systems!+%F0%9F%9A%80" alt="Typing SVG" />
 </div>
 
 ### 🧑‍💻 About Me
 
 ```go
-type Developer struct {
-    Name     string   `json:"name"`
-    Role     string   `json:"role"`  
-    Focus    []string `json:"focus"`
-    Note     string   `json:"note"`
+package main
+
+import "sync"
+
+type Engineer struct {
+    Name  string   `json:"name"`
+    Role  Role     `json:"role"`
+    Focus []string `json:"focus"`
 }
 
-func NewShabab() Developer {
-    return Developer{
-        Name:    "Ahmed Shabab Noor",
-        Role:    "Data Engineer II at Pathao",
-        Focus:   []string{"Data", "Backend", "Analytics", "AI & ML", "Building Scalable Systems"},
-        Note:    "Professional work on company's self-hosted GitLab, personal projects on GitHub",
-    }
+type Role struct {
+    Current  string `json:"current"`
+    Previous string `json:"previous"`
+}
+
+var (
+    me   *Engineer
+    once sync.Once
+)
+
+func Shabab() *Engineer {
+    once.Do(func() {
+        me = &Engineer{
+            Name: "Ahmed Shabab Noor",
+            Role: Role{
+                Current:  "Software Engineer L-3 at Fin.com",
+                Previous: "Data Engineer L-2 at Pathao",
+            },
+            Focus: []string{"Backend Systems", "Data and Analytics", "AI and ML", "Scalable Architecure"},
+        }
+    })
+    return me
 }
 ```
 
@@ -67,9 +85,7 @@ func NewShabab() Developer {
 ### 🎯 GitHub Analytics
 
 <div align="center">
-  <img height="160em" src="https://github-readme-stats.vercel.app/api?username=ashababnoor&show_icons=true&theme=dark&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117&title_color=00d4aa&icon_color=00d4aa&text_color=c9d1d9"/>
-
-  <img height="160em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashababnoor&layout=compact&langs_count=6&theme=dark&hide_border=true&bg_color=0d1117&title_color=00d4aa&text_color=c9d1d9"/>
+  <img src="github-metrics.svg" alt="GitHub Metrics" />
 </div>
 
 <div align="center">
