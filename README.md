@@ -85,12 +85,18 @@ func Shabab() *Engineer {
 ### 🎯 GitHub Analytics
 
 <div align="center">
-  <img src="github-metrics.svg" alt="GitHub Metrics" />
+  <img src="github-metrics.svg?v=1" alt="GitHub Metrics" />
 </div>
 
-<div align="center">
+<!-- <div align="center">
+  <img height="160em" src="https://github-readme-stats.vercel.app/api?username=ashababnoor&show_icons=true&theme=dark&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117&title_color=00d4aa&icon_color=00d4aa&text_color=c9d1d9"/>
+
+  <img height="160em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashababnoor&layout=compact&langs_count=6&theme=dark&hide_border=true&bg_color=0d1117&title_color=00d4aa&text_color=c9d1d9"/>
+</div> -->
+
+<!-- <div align="center">
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=ashababnoor&theme=dark&hide_border=true&background=0d1117&stroke=00d4aa&ring=00d4aa&fire=00d4aa&currStreakNum=c9d1d9&sideNums=c9d1d9&currStreakLabel=00d4aa&sideLabels=c9d1d9&dates=c9d1d9" alt="GitHub Streak" />
-</div>
+</div> -->
 
 <!-- ## 🏆 GitHub Achievements
 <div align="center">
