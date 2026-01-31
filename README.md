@@ -4,18 +4,20 @@
 
 <br/>
 
-### 🚀 About Me
+### 🧑‍💻 About Me
 
 I'm a **Software Engineer** specializing in building high-performance, scalable backend and data systems. I enjoy bridging the gap between raw data and actionable engineering.
 
 - 🔭 **Currently**: Software Engineer L-3 @ [**Fin.com**](https://www.fin.com)
-  - *Developing infrastructure for global money movement.*
+  - Developing infrastructure for global money movement.
+  - From December 2025 to Present
 - 🏗️ **Previously**: Data Engineer L-2 @ [**Pathao**](https://www.pathao.com)
-  - *Architected data systems for South Asia's leading Consumer Tech Superapp.*
+  - Architected data products for South Asia's leading Consumer Tech super app.
+  - From October 2022 to December 2025
 - 🎯 **Focus**: Distributed Systems, Data Engineering, & AI/ML
-- 💬 **Lets Discuss About**: Go, SQL optimization, and building resilient data pipelines
+- 💬 **Lets Talk About**: Go, SQL optimization, and building resilient data pipelines
+- 🚀 Check out my [Resume](https://ashababnoor.github.io) and [LinkedIn](https://linkedin.com/in/ashababnoor) for more details.
 
----
 
 ### 🛠️ Tech Stack
 
@@ -78,7 +80,6 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
   </tr>
 </table>
 
----
 
 ### 📊 GitHub Dashboard
 
@@ -86,7 +87,6 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
   <img src="github-metrics.svg" alt="GitHub Metrics" />
 </div>
 
----
 
 ### 🤝 Connect With Me
 
@@ -96,8 +96,6 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/ashababnoor)
 [![Google Scholar](https://img.shields.io/badge/-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=b6chKnEAAAAJ)
 
-<br/>
-
-![Profile Views](https://komarev.com/ghpvc/?username=ashababnoor&color=00D4AA&style=flat-square&label=PROFILE+VIEWS)
+![Profile Views](https://komarev.com/ghpvc/?username=ashababnoor&color=blue&style=flat-square&label=PROFILE+VIEWS)
 
 </div>
