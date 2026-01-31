@@ -21,13 +21,6 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 
 <div align="center">
 
-<div>
-  <picture>
-    <source media="(max-width: 600px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-    <img width="1" height="1" alt="">
-  </picture>
-</div>
-
 <div align="left">
 
 #### 💻 Languages
