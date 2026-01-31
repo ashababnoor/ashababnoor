@@ -1,7 +1,7 @@
 name: Metrics
 on:
-  # Schedule to run every hour
-  schedule: [{cron: "0 * * * *"}]
+  # Schedule to run every 3 hours
+  schedule: [{cron: "0 */3 * * *"}]
   # (optional) Run workflow manually
   workflow_dispatch:
   # (optional) Run workflow when pushing on master/main
@@ -21,9 +21,9 @@ jobs:
           config_timezone: Asia/Dhaka
           plugin_languages: yes
           plugin_languages_ignored: >-
-            html, css, scss, ipynb, Jupyter Notebook
-          plugin_languages_details: lines, percentage
+            html, css, scss, jupyter notebook
+          plugin_languages_details: bytes-size, percentage
           plugin_languages_indepth: yes
-          plugin_languages_limit: 10
+          plugin_languages_limit: 8
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
