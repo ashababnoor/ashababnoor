@@ -19,9 +19,10 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 
 ### 🛠️ Tech Stack
 
-<table align="center" style="border-collapse: collapse; border: none;">
-  <tr style="background-color: transparent;">
-    <td align="left" width="50%" valign="top" style="border: none;">
+<div style="border: 0;">
+<table align="center" style="border: 0; border-collapse: collapse;">
+  <tr style="background: transparent; border: 0;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>💻 Languages</h4>
       <img src="https://img.shields.io/badge/-Go-00ADD8?style=flat&logo=go&logoColor=white" />
       <img src="https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white" />
@@ -32,7 +33,7 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
       <img src="https://img.shields.io/badge/-Java-ED8B00?style=flat&logo=java&logoColor=white" />
       <img src="https://img.shields.io/badge/-PHP-777BB4?style=flat&logo=php&logoColor=white" />
     </td>
-    <td align="left" width="50%" valign="top" style="border: none;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>🗄️ Databases & Storage</h4>
       <img src="https://img.shields.io/badge/-PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white" />
       <img src="https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=mysql&logoColor=white" />
@@ -41,8 +42,8 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
       <img src="https://img.shields.io/badge/-BigQuery-4285F4?style=flat&logo=google-cloud&logoColor=white" />
     </td>
   </tr>
-  <tr style="background-color: transparent;">
-    <td align="left" width="50%" valign="top" style="border: none;">
+  <tr style="background: transparent; border: 0;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>📊 Data & Analytics</h4>
       <img src="https://img.shields.io/badge/-dbt-FF694B?style=flat&logo=dbt&logoColor=white" />
       <img src="https://img.shields.io/badge/-Pandas-150458?style=flat&logo=pandas&logoColor=white" />
@@ -51,7 +52,7 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
       <img src="https://img.shields.io/badge/-Redash-FF7964?style=flat&logo=redash&logoColor=white" />
       <img src="https://img.shields.io/badge/-Looker%20Studio-4285F4?style=flat&logo=looker&logoColor=white" />
     </td>
-    <td align="left" width="50%" valign="top" style="border: none;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>☁️ Cloud & DevOps</h4>
       <img src="https://img.shields.io/badge/-GCP-4285F4?style=flat&logo=google-cloud&logoColor=white" />
       <img src="https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white" />
@@ -60,14 +61,14 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
       <img src="https://img.shields.io/badge/-GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white" />
     </td>
   </tr>
-  <tr style="background-color: transparent;">
-    <td align="left" width="50%" valign="top" style="border: none;">
+  <tr style="background: transparent; border: 0;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>🚀 Messaging & Streaming</h4>
       <img src="https://img.shields.io/badge/-Kafka-000000?style=flat&logo=apache-kafka&logoColor=white" />
       <img src="https://img.shields.io/badge/-Google%20Pub%2FSub-4285F4?style=flat&logo=google-cloud&logoColor=white" />
       <img src="https://img.shields.io/badge/-RabbitMQ-FF6600?style=flat&logo=rabbitmq&logoColor=white" />
     </td>
-    <td align="left" width="50%" valign="top" style="border: none;">
+    <td align="left" width="50%" valign="top" style="border: 0; background: transparent;">
       <h4>🛠️ Tools & Environments</h4>
       <img src="https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white" />
       <img src="https://img.shields.io/badge/-VS%20Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white" />
@@ -77,6 +78,7 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
     </td>
   </tr>
 </table>
+</div>
 
 ---
 
@@ -92,9 +94,9 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 
 <div align="center">
 
-<a href="https://ashababnoor.github.io" style="text-decoration: none;"><img src="https://img.shields.io/badge/-Resume-0078D4?style=for-the-badge&logoColor=white" alt="Resume" /></a>
-<a href="https://linkedin.com/in/ashababnoor" style="text-decoration: none;"><img src="https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-<a href="https://scholar.google.com/citations?user=b6chKnEAAAAJ" style="text-decoration: none;"><img src="https://img.shields.io/badge/-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white" alt="Google Scholar" /></a>
+[![Resume](https://img.shields.io/badge/-Resume-0078D4?style=for-the-badge&logoColor=white)](https://ashababnoor.github.io)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/ashababnoor)
+[![Google Scholar](https://img.shields.io/badge/-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=b6chKnEAAAAJ)
 
 <br/>
 
