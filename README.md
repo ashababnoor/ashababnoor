@@ -81,11 +81,13 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 </table>
 
 
+<!-- 
 ### 📊 GitHub Dashboard
 
 <div align="center">
   <img src="github-metrics.svg" alt="GitHub Metrics" />
 </div>
+-->
 
 
 ### 🤝 Connect With Me
