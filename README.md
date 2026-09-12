@@ -96,7 +96,7 @@ I'm a **Software Engineer** specializing in building high-performance, scalable 
 
 [![Resume](https://img.shields.io/badge/-Resume-0078D4?style=for-the-badge&logoColor=white)](https://shababnoor.com)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/ashababnoor)
-[![Google Scholar](https://img.shields.io/badge/-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=b6chKnEAAAAJ)
+[![Google Scholar](https://img.shields.io/badge/-Scholar-4285F4?style=for-the-badge&logo=google-scholar&logoColor=white)](https://scholar.google.com/citations?user=mD402DsAAAAJ)
 
 ![Profile Views](https://komarev.com/ghpvc/?username=ashababnoor&color=blue&style=flat-square&label=PROFILE+VIEWS)
 
