@@ -1,7 +1,7 @@
 name: Metrics
 on:
-  # Schedule to run every 3 hours
-  schedule: [{cron: "0 */3 * * *"}]
+  # Schedule to run every 12 hours
+  schedule: [{cron: "0 */12 * * *"}]
   # (optional) Run workflow manually
   workflow_dispatch:
   # (optional) Run workflow when pushing on master/main
