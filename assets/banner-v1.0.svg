@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="846" height="120" viewBox="0 0 846 120" role="img" aria-labelledby="t">
+  <title id="t">Ahmed Shabab Noor — Software &amp; Data Engineer. Backend systems, data pipelines, AI and machine learning.</title>
+  <style>
+    .bg    { fill: #F6F8FB; }
+    .name  { fill: #0B1220; }
+    .role  { fill: #4B5568; }
+    .tag   { fill: #6B7488; }
+    .path  { fill: #15803D; }
+    .cursor { animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; } 56%, 100% { fill-opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .blob1 { fill: #00D4AA; fill-opacity: .55; }
+    .blob2 { fill: #6366F1; fill-opacity: .40; }
+    .blob3 { fill: #38BDF8; fill-opacity: .45; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #121212; }
+      .name  { fill: #E0E0E0; }
+      .role  { fill: #B8B8B8; }
+      .tag   { fill: #949494; }
+      .path  { fill: #4ADE80; }
+      .bar   { fill: #00D4AA; }
+      .blob1 { fill-opacity: .45; }
+      .blob2 { fill-opacity: .50; }
+      .blob3 { fill-opacity: .35; }
+    }
+  </style>
+  <defs>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="27"/>
+    </filter>
+    <clipPath id="card"><rect width="846" height="120"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect class="bg" width="846" height="120"/>
+    <g filter="url(#blur)">
+      <ellipse class="blob1" cx="656"  cy="23"  rx="134" ry="54"/>
+      <ellipse class="blob2" cx="768"  cy="91"  rx="120" ry="49"/>
+      <ellipse class="blob3" cx="557"  cy="100" rx="99"  ry="36"/>
+    </g>
+  </g>
+
+    <text class="path" x="44" y="22.25" font-size="12" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
+    <text class="name" x="42" y="60.5" font-size="32" font-weight="700" letter-spacing="-1">Ahmed Shabab Noor</text>
+    <text class="role" x="44" y="80.5" font-size="15" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+  </g>
+  <text class="tag" x="44" y="104.75" font-size="11" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+</svg>
