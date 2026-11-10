@@ -6,27 +6,27 @@
   </picture>
 </div>
 
-### 🧑‍💻 About Me
+### <img src="assets/icons/user.svg" width="18" height="18" align="absmiddle" alt=""> About Me
 
 I'm a **Software and Data Engineer** specializing in building high-performance, scalable backend and data systems. I enjoy bridging the gap between raw data and actionable engineering.
 
-🔭 **Currently:** Software Engineer L-3 @ [**Fin.com**](https://www.fin.com)  
+**Currently:** Software Engineer L-3 @ [**Fin.com**](https://www.fin.com)  
 Developing infrastructure for global money movement  
 From December 2025 to Present  
 <sub>Details at [shababnoor.com # fin](https://shababnoor.com/#fin).</sub>
 
-🏗️ **Previously:** Data Engineer L-2 @ [**Pathao**](https://www.pathao.com)  
+**Previously:** Data Engineer L-2 @ [**Pathao**](https://www.pathao.com)  
 Architected data products for South Asia's leading Consumer Tech super app  
 From October 2022 to December 2025  
 <sub>Details at [shababnoor.com # pathao](https://shababnoor.com/#pathao).</sub>
 
-💬 **Let's Talk About:** Technology, photography, food, puzzles, and anime (or anything)  
+**Let's Talk About:** Technology, photography, food, puzzles, and anime (or anything)  
 
-🎯 Always open to interesting problems, collaborations, and good conversations!  
+Always open to interesting problems, collaborations, and good conversations!  
 Check out my [personal site](https://shababnoor.com) and [LinkedIn](https://linkedin.com/in/ashababnoor) for more details and contacts.
 
 
-### 🛠️ Core Tech Stack
+### <img src="assets/icons/layers.svg" width="18" height="18" align="absmiddle" alt=""> Core Tech Stack
 
 <div align="left">
   <img src="https://img.shields.io/badge/-Go-00ADD8?style=flat&logo=go&logoColor=white" />
@@ -47,7 +47,7 @@ Check out my [personal site](https://shababnoor.com) and [LinkedIn](https://link
 <sub>Full tech stack at [shababnoor.com](https://shababnoor.com/#skills).</sub>
 
 
-### 📄 Publications
+### <img src="assets/icons/book.svg" width="18" height="18" align="absmiddle" alt=""> Publications
 
 4 peer-reviewed papers in machine learning ([Google Scholar](https://scholar.google.com/citations?user=mD402DsAAAAJ)):
 
@@ -57,7 +57,7 @@ Check out my [personal site](https://shababnoor.com) and [LinkedIn](https://link
 - [The impact of data locality on the performance of cluster-based under-sampling](https://link.springer.com/chapter/10.1007/978-3-031-34622-4_16) · Springer MIET 2022
 
 
-### 🤝 Connect With Me
+### <img src="assets/icons/link.svg" width="18" height="18" align="absmiddle" alt=""> Connect With Me
 
 <div align="left">
 
