@@ -10,17 +10,17 @@
 
 I'm a **Software and Data Engineer** specializing in building high-performance, scalable backend and data systems. I enjoy bridging the gap between raw data and actionable engineering.
 
-- 🔭 **Currently**: Software Engineer L-3 @ [**Fin.com**](https://www.fin.com)
-  - Developing infrastructure for global money movement
-  - From December 2025 to Present  
-  <sub>Details at [shababnoor.com # fin](https://shababnoor.com/#fin).</sub>
+🔭 **Currently:** Software Engineer L-3 @ [**Fin.com**](https://www.fin.com)  
+Developing infrastructure for global money movement  
+From December 2025 to Present  
+<sub>Details at [shababnoor.com # fin](https://shababnoor.com/#fin).</sub>
 
-- 🏗️ **Previously**: Data Engineer L-2 @ [**Pathao**](https://www.pathao.com)
-  - Architected data products for South Asia's leading Consumer Tech super app
-  - From October 2022 to December 2025  
-  <sub>Details at [shababnoor.com # pathao](https://shababnoor.com/#pathao).</sub>
+🏗️ **Previously:** Data Engineer L-2 @ [**Pathao**](https://www.pathao.com)  
+Architected data products for South Asia's leading Consumer Tech super app  
+From October 2022 to December 2025  
+<sub>Details at [shababnoor.com # pathao](https://shababnoor.com/#pathao).</sub>
 
-💬 **Let's Talk About**: Technology, photography, food, puzzles, and anime (or anything)  
+💬 **Let's Talk About:** Technology, photography, food, puzzles, and anime (or anything)  
 
 🎯 Always open to interesting problems, collaborations, and good conversations!  
 Check out my [personal site](https://shababnoor.com) and [LinkedIn](https://linkedin.com/in/ashababnoor) for more details and contacts.
