@@ -2,7 +2,7 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=26&weight=700&duration=2800&pause=2000&color=00D4AA&center=true&vCenter=true&width=800&lines=Hey+there!+I'm+Shabab+%F0%9F%91%8B;Software+Engineer+L-3+at+Fin.com;Previously,+Data+Engineer+L-2+at+Pathao;Building+scalable+data+%26+backend+systems!+%F0%9F%9A%80" alt="Typing SVG" />
 </div>
 
-<br/>
+<!-- <br/> -->
 
 ### 🧑‍💻 About Me
 
