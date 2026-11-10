@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-default-user="{{DEFAULT_USER}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Profile preview</title>
+  <link rel="stylesheet" href="/static/bar.css">
+</head>
+<body>
+  <header id="bar">
+    <form id="user-form" autocomplete="off">
+      <label>Profile <input id="user" name="user" spellcheck="false" maxlength="39" required></label>
+      <button type="submit">Show</button>
+      <button type="button" id="refresh" title="Download this profile page again">Refresh profile</button>
+    </form>
+    <div class="group"><span class="label">Theme</span><div class="seg" id="theme" role="group" aria-label="Theme"></div></div>
+    <div class="group"><span class="label">Display</span><div class="seg" id="width" role="group" aria-label="Display width"></div></div>
+    <div class="group" id="versions-wrap" hidden><span class="label">Image version</span><div class="seg" id="versions" role="group" aria-label="Image version"></div></div>
+    <span id="status" role="status" aria-live="polite"></span>
+  </header>
+  <iframe id="frame" title="GitHub profile preview"></iframe>
+  <script src="/static/bar.js"></script>
+</body>
+</html>
