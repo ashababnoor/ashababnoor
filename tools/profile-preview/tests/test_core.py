@@ -197,6 +197,40 @@ class Fingerprint(unittest.TestCase):
             self.assertNotEqual(after_edit, core.fingerprint(root))
 
 
+class ReadmeVersions(unittest.TestCase):
+    def make(self, names):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        for name in names:
+            (root / name).parent.mkdir(parents=True, exist_ok=True)
+            (root / name).write_text("x")
+        return root
+
+    def test_lists_readme_variants_in_the_repo_root_with_the_main_one_first(self):
+        root = self.make(["README-v2.md", "README.md", "README-v10.md", "README-v3.md", "notes.md", "README.txt",
+                          "versions/v1.0.md", "docs/README.md", ".README-hidden.md"])
+        self.assertEqual(core.list_readmes(root), ["README.md", "README-v2.md", "README-v3.md", "README-v10.md"])
+
+    def test_lists_nothing_when_there_is_no_readme_at_all(self):
+        self.assertEqual(core.list_readmes(self.make(["notes.md"])), [])
+
+    def test_resolves_only_listed_readme_names(self):
+        root = self.make(["README.md", "README-v2.md", "secret.md", "versions/v1.0.md"])
+        self.assertEqual(core.readme_path(root, "README-v2.md"), (root / "README-v2.md"))
+        for bad in ("secret.md", "../README.md", "versions/v1.0.md", "/etc/passwd", "README-v9.md", ""):
+            self.assertIsNone(core.readme_path(root, bad), bad)
+
+    def test_fingerprint_notices_edits_to_any_readme_variant(self):
+        root = self.make(["README.md", "README-v2.md"])
+        before = core.fingerprint(root)
+        (root / "README-v2.md").write_text("longer text")
+        edited = core.fingerprint(root)
+        self.assertNotEqual(before, edited)
+        (root / "README-v3.md").write_text("new")
+        self.assertNotEqual(edited, core.fingerprint(root))
+
+
 class StaticFingerprint(unittest.TestCase):
     def test_changes_when_a_ui_file_is_edited_or_added(self):
         with tempfile.TemporaryDirectory() as tmp:

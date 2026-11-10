@@ -21,9 +21,12 @@ Python 3 standard library only, nothing to install. Your browser opens on `http:
 |---|---|
 | Profile + Show | View any GitHub username with your README in it. Each username is downloaded once and cached. |
 | Refresh profile | Download that profile page again. |
+| README | Shown when the repo root has more than one README (`README.md`, `README-v2.md`, …). Pick which file to preview. |
 | Theme | Auto (system), Light or Dark buttons. Sets GitHub's own theme, so SVGs that follow `prefers-color-scheme` switch too. |
 | Display | Desktop, tablet or phone. |
 | Image version | One button per version of an image your README uses (`banner-v1.0.svg`, `banner-v1.1.svg`, …; the `-vX.Y` part is ignored, only `assets/` is searched). Click one to preview it in place of the README's image, without editing. "README" shows it as written. |
+
+The small tab under the bar hides it, so the preview gets the full height. Click it again to bring the bar back. The tool remembers that, and your theme, display and README choice.
 
 ## Good to know
 

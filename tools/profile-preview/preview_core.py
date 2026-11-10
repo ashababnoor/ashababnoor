@@ -176,11 +176,34 @@ def build_page(profile_html, readme_html, origin=""):
     return page
 
 
+_README_NAME_RE = re.compile(r"^README(?:[-_. ][^/\\]*)?\.md$")
+
+
+def _natural_key(name):
+    return [int(part) if part.isdigit() else part.lower() for part in re.split(r"(\d+)", name)]
+
+
+def list_readmes(root):
+    """README variants in the repo root (README.md, README-v2.md, ...), the main one first."""
+    root = Path(root)
+    if not root.is_dir():
+        return []
+    names = [p.name for p in root.iterdir() if p.is_file() and _README_NAME_RE.match(p.name)]
+    return sorted(names, key=lambda n: (n != "README.md", _natural_key(n)))
+
+
+def readme_path(root, name):
+    """The path of a listed README variant, or None for anything else (no traversal)."""
+    if name in list_readmes(root):
+        return Path(root) / name
+    return None
+
+
 def fingerprint(root):
-    """A short hash that changes whenever README.md or any image changes."""
+    """A short hash that changes whenever a README variant or any image changes."""
     root = Path(root)
     digest = hashlib.sha1()
-    for rel in ["README.md", *list_images(root)]:
+    for rel in [*list_readmes(root), *list_images(root)]:
         path = root / rel
         try:
             stat = path.stat()

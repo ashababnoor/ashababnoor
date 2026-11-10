@@ -163,6 +163,38 @@ class PageRoute(AppTestCase):
         self.assertIn("GITHUB_TOKEN", body)
 
 
+class ReadmeChoice(AppTestCase):
+    def setUp(self):
+        super().setUp()
+        (self.root / "README-v2.md").write_text('v2 text <img src="assets/a.svg">')
+
+    def test_state_lists_the_readme_variants(self):
+        state = json.loads(self.app.handle("/api/state")[2])
+        self.assertEqual(state["readmes"], ["README.md", "README-v2.md"])
+
+    def test_page_shows_the_chosen_readme_and_defaults_to_readme_md(self):
+        _s, _c, body = self.get("/page?user=someone&readme=README-v2.md")
+        self.assertIn("rendered:v2 text", body)
+        _s, _c, body = self.get("/page?user=someone")
+        self.assertIn("rendered:hello", body)
+
+    def test_page_rejects_a_readme_that_is_not_in_the_list(self):
+        for bad in ("../README.md", "notes.md", "README-v9.md"):
+            status, _c, _body = self.get("/page?user=someone&readme=" + bad)
+            self.assertEqual(status, 400, bad)
+
+    def test_state_image_versions_come_from_the_chosen_readme(self):
+        default = json.loads(self.app.handle("/api/state")[2])["images"]
+        chosen = json.loads(self.app.handle("/api/state?readme=README-v2.md")[2])["images"]
+        self.assertEqual(default, [])
+        self.assertEqual(chosen, ["assets/a.svg"])
+
+    def test_state_changes_when_another_readme_is_edited(self):
+        first = json.loads(self.app.handle("/api/state")[2])["fingerprint"]
+        (self.root / "README-v2.md").write_text("edited, now longer")
+        self.assertNotEqual(first, json.loads(self.app.handle("/api/state")[2])["fingerprint"])
+
+
 class RepoRoute(AppTestCase):
     def test_serves_an_image_with_the_right_content_type(self):
         status, ctype, body = self.get("/repo/assets/a.svg")

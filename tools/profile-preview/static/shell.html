@@ -9,11 +9,13 @@
 </head>
 <body>
   <header id="bar">
+    <button type="button" id="bar-toggle" aria-controls="bar" aria-expanded="true" title="Hide the top bar" aria-label="Hide the top bar"><span class="chev"></span></button>
     <form id="user-form" autocomplete="off">
       <label>Profile <input id="user" name="user" spellcheck="false" maxlength="39" required></label>
       <button type="submit">Show</button>
       <button type="button" id="refresh" title="Download this profile page again">Refresh profile</button>
     </form>
+    <div class="group" id="readmes-wrap" hidden><span class="label">README</span><div class="seg" id="readmes" role="group" aria-label="README file"></div></div>
     <div class="group"><span class="label">Theme</span><div class="seg" id="theme" role="group" aria-label="Theme"></div></div>
     <div class="group"><span class="label">Display</span><div class="seg" id="width" role="group" aria-label="Display width"></div></div>
     <div class="group" id="versions-wrap" hidden><span class="label">Image version</span><div class="seg" id="versions" role="group" aria-label="Image version"></div></div>

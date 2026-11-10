@@ -71,7 +71,7 @@ class PreviewApp:
         if path == "/page":
             return self._page(query)
         if path == "/api/state":
-            return self._state()
+            return self._state(query)
         if path.startswith("/repo/"):
             return self._repo_file(unquote(path[len("/repo/"):]))
         if path.startswith("/static/"):
@@ -84,10 +84,16 @@ class PreviewApp:
         page = template.replace("{{DEFAULT_USER}}", html.escape(self.default_user or "", quote=True))
         return 200, HTML, page.encode("utf-8")
 
-    def _state(self):
-        readme = self.root / "README.md"
+    def _default_readme(self):
+        readmes = core.list_readmes(self.root)
+        return readmes[0] if readmes else "README.md"
+
+    def _state(self, query):
+        wanted = (query.get("readme") or [""])[0]
+        readme = core.readme_path(self.root, wanted) or self.root / self._default_readme()
         text = readme.read_text(encoding="utf-8") if readme.is_file() else ""
         payload = {"fingerprint": core.fingerprint(self.root), "images": core.list_versions(self.root, text),
+                   "readmes": core.list_readmes(self.root),
                    "ui": core.static_fingerprint(self.static_dir), "boot": self.boot}
         return 200, "application/json", json.dumps(payload).encode("utf-8")
 
@@ -108,9 +114,15 @@ class PreviewApp:
         user = (query.get("user") or [self.default_user or ""])[0]
         if not core.valid_username(user):
             return _message_page(400, "Invalid username", f"“{user}” is not a valid GitHub username.")
-        readme_path = self.root / "README.md"
-        if not readme_path.is_file():
-            return _message_page(400, "README.md not found", f"There is no README.md in {self.root}.")
+        wanted = (query.get("readme") or [""])[0]
+        if wanted:
+            readme_path = core.readme_path(self.root, wanted)
+            if readme_path is None:
+                return _message_page(400, "Unknown README", f"“{wanted}” is not a README file in {self.root}.")
+        else:
+            readme_path = self.root / self._default_readme()
+            if not readme_path.is_file():
+                return _message_page(400, "README.md not found", f"There is no README.md in {self.root}.")
 
         profile_key = f"profile-{user.lower()}"
         if query.get("refresh"):
