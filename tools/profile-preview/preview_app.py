@@ -17,6 +17,7 @@ import preview_core as core
 
 HTML = "text/html; charset=utf-8"
 STATIC_TYPES = {".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8"}
+RENDER_MODE = "markdown"  # GitHub's README rendering (see serve.render_markdown)
 LAST_RENDER_KEY = "last-render"
 LAST_RENDER_KEY_NAME = "last-render-key"  # which readme-<hash> file is the current one
 
@@ -161,7 +162,8 @@ class PreviewApp:
 
     def _rendered_readme(self, text):
         """Return (html, warning). html is None when nothing could be rendered."""
-        key = "readme-" + hashlib.sha256(f"{self.context}\n{text}".encode("utf-8")).hexdigest()[:16]
+        # RENDER_MODE is in the key so renders made in another mode are not reused.
+        key = "readme-" + hashlib.sha256(f"{RENDER_MODE}\n{self.context}\n{text}".encode("utf-8")).hexdigest()[:16]
         cached = self.cache.get(key)
         if cached is not None:
             return cached, None

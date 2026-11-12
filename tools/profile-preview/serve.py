@@ -54,7 +54,9 @@ def render_markdown(text, context):
     token = os.environ.get("GITHUB_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    body = json.dumps({"text": text, "mode": "gfm", "context": context}).encode("utf-8")
+    # "markdown" renders like a README file. ("gfm" renders like a comment, where
+    # every newline becomes a line break, so badges on separate lines would stack.)
+    body = json.dumps({"text": text, "mode": preview_app.RENDER_MODE, "context": context}).encode("utf-8")
     request = urllib.request.Request("https://api.github.com/markdown", data=body, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
