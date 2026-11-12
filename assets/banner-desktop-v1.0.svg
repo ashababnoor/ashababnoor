@@ -4,10 +4,11 @@
     .bg    { fill: #F6F8FB; }
     .name  { fill: #0B1220; }
     .role  { fill: #4B5568; }
-    .tag   { fill: #636D80; }
-    .path  { fill: #15803D; }
+    .tag   { fill: #4B5568; }
+    .path  { fill: #15803D; stroke: #15803D; stroke-width: 0.35; stroke-linejoin: round; }
+    .path .tag { stroke: #4B5568; }
     .cursor { animation: blink 1.1s steps(1) infinite; }
-    @keyframes blink { 0%, 55% { fill-opacity: 1; } 56%, 100% { fill-opacity: 0; } }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; stroke-opacity: 1; } 56%, 100% { fill-opacity: 0; stroke-opacity: 0; } }
     @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
     .blob1 { fill: #00D4AA; fill-opacity: .55; }
     .blob2 { fill: #6366F1; fill-opacity: .40; }
@@ -16,8 +17,9 @@
       .bg    { fill: #121212; }
       .name  { fill: #E0E0E0; }
       .role  { fill: #B8B8B8; }
-      .tag   { fill: #949494; }
-      .path  { fill: #4ADE80; }
+      .tag   { fill: #B8B8B8; }
+      .path  { fill: #4ADE80; stroke: none; }
+      .path .tag { stroke: none; }
       .bar   { fill: #00D4AA; }
       .blob1 { fill-opacity: .45; }
       .blob2 { fill-opacity: .50; }
