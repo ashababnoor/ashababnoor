@@ -7,21 +7,55 @@
   <title>Profile preview</title>
   <link rel="stylesheet" href="/static/bar.css">
 </head>
-<body>
-  <header id="bar">
-    <button type="button" id="bar-toggle" aria-controls="bar" aria-expanded="true" title="Hide the top bar" aria-label="Hide the top bar"><span class="chev"></span></button>
-    <form id="user-form" autocomplete="off">
-      <label>Profile <input id="user" name="user" spellcheck="false" maxlength="39" required></label>
-      <button type="submit">Show</button>
-      <button type="button" id="refresh" title="Download this profile page again">Refresh profile</button>
-    </form>
-    <div class="group" id="readmes-wrap" hidden><span class="label">README</span><div class="seg" id="readmes" role="group" aria-label="README file"></div></div>
-    <div class="group"><span class="label">Theme</span><div class="seg" id="theme" role="group" aria-label="Theme"></div></div>
-    <div class="group"><span class="label">Display</span><div class="seg" id="width" role="group" aria-label="Display width"></div></div>
-    <div class="group" id="versions-wrap" hidden><span class="label">Image version</span><div class="seg" id="versions" role="group" aria-label="Image version"></div></div>
-    <span id="status" role="status" aria-live="polite"></span>
-  </header>
-  <iframe id="frame" title="GitHub profile preview"></iframe>
+<body data-dock="top">
+  <aside id="bar" aria-label="Preview controls">
+    <div id="bar-body">
+      <form id="user-form" autocomplete="off">
+        <label>Profile <input id="user" name="user" spellcheck="false" maxlength="39" required></label>
+        <button type="submit" data-icon="search" title="Show this profile (or press Enter)">Show</button>
+        <button type="button" id="refresh" data-icon="refresh" title="Download this profile page again">Refresh profile</button>
+      </form>
+
+      <div class="group">
+        <span class="label">Theme</span>
+        <div class="seg" id="theme" role="group" aria-label="Theme"></div>
+      </div>
+
+      <div class="group">
+        <span class="label">Display</span>
+        <div class="seg" id="width" role="group" aria-label="Display width"></div>
+      </div>
+
+      <div class="group">
+        <span class="label">Panel</span>
+        <div class="seg" id="dock" role="group" aria-label="Panel position"></div>
+      </div>
+
+      <div class="group" id="readmes-wrap" hidden>
+        <label class="label" for="readme">README</label>
+        <span class="select"><select id="readme"></select></span>
+      </div>
+
+      <div class="group" id="slots-wrap" hidden>
+        <label class="label" for="slot">Images</label>
+        <div class="slot-row">
+          <span class="select"><select id="slot" title="Which image in the README to try alternatives for"></select></span>
+          <button type="button" id="reset-swaps" hidden title="Show every image as the README has it">Reset all</button>
+        </div>
+        <div class="seg" id="options" role="group" aria-label="Image to show"></div>
+      </div>
+
+      <span id="status" role="status" aria-live="polite"></span>
+    </div>
+
+    <div id="bar-resize" role="separator" title="Drag to resize · double-click to reset"></div>
+    <button type="button" id="bar-toggle" aria-controls="bar-body" aria-expanded="true"><span class="chev"></span></button>
+  </aside>
+
+  <main id="stage">
+    <iframe id="frame" title="GitHub profile preview"></iframe>
+  </main>
+
   <script src="/static/bar.js"></script>
 </body>
 </html>

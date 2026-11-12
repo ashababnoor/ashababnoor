@@ -8,6 +8,7 @@ import hashlib
 import html
 import json
 import mimetypes
+import posixpath
 import secrets
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
@@ -15,15 +16,6 @@ from urllib.parse import parse_qs, unquote, urlsplit
 import preview_core as core
 
 HTML = "text/html; charset=utf-8"
-IMAGE_TYPES = {
-    ".svg": "image/svg+xml",
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".gif": "image/gif",
-    ".webp": "image/webp",
-    ".ico": "image/x-icon",
-}
 STATIC_TYPES = {".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8"}
 LAST_RENDER_KEY = "last-render"
 LAST_RENDER_KEY_NAME = "last-render-key"  # which readme-<hash> file is the current one
@@ -39,6 +31,11 @@ class RenderError(Exception):
     def __init__(self, message, rate_limited=False):
         super().__init__(message)
         self.rate_limited = rate_limited
+
+
+def _folder_of(readme_name):
+    """The folder a README is in, relative to the repo: "" for README.md, "versions" for versions/v1.0.md."""
+    return posixpath.dirname(readme_name)
 
 
 def _message_page(status, title, message):
@@ -90,9 +87,11 @@ class PreviewApp:
 
     def _state(self, query):
         wanted = (query.get("readme") or [""])[0]
-        readme = core.readme_path(self.root, wanted) or self.root / self._default_readme()
+        name = wanted if core.readme_path(self.root, wanted) else self._default_readme()
+        readme = self.root / name
         text = readme.read_text(encoding="utf-8") if readme.is_file() else ""
-        payload = {"fingerprint": core.fingerprint(self.root), "images": core.list_versions(self.root, text),
+        slots = core.list_slots(self.root, text, _folder_of(name))
+        payload = {"fingerprint": core.fingerprint(self.root), "slots": slots,
                    "readmes": core.list_readmes(self.root),
                    "ui": core.static_fingerprint(self.static_dir), "boot": self.boot}
         return 200, "application/json", json.dumps(payload).encode("utf-8")
@@ -101,7 +100,7 @@ class PreviewApp:
         path = core.safe_image_path(self.root, rel)
         if path is None:
             return _message_page(404, "Not found", "That file is not an image inside this repo.")
-        ctype = IMAGE_TYPES.get(path.suffix.lower()) or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        ctype = core.IMAGE_TYPES.get(path.suffix.lower()) or mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         return 200, ctype, path.read_bytes()
 
     def _static_file(self, rel):
@@ -119,8 +118,10 @@ class PreviewApp:
             readme_path = core.readme_path(self.root, wanted)
             if readme_path is None:
                 return _message_page(400, "Unknown README", f"“{wanted}” is not a README file in {self.root}.")
+            name = wanted
         else:
-            readme_path = self.root / self._default_readme()
+            name = self._default_readme()
+            readme_path = self.root / name
             if not readme_path.is_file():
                 return _message_page(400, "README.md not found", f"There is no README.md in {self.root}.")
 
@@ -140,16 +141,23 @@ class PreviewApp:
         rendered, warning = self._rendered_readme(readme_path.read_text(encoding="utf-8"))
         if rendered is None:
             return _message_page(502, "Could not render the README", warning)
-        image = (query.get("img") or [""])[0]
-        if image and core.safe_image_path(self.root, image):
-            rendered = core.swap_image(core.rewrite_relative_srcs(rendered, self.origin), image, self.origin)
+        swaps = self._swaps(query)
         if warning:
             rendered = f'<div class="preview-warning" style="padding:8px 12px;margin-bottom:16px;background:Mark;color:MarkText">⚠ {html.escape(warning)}</div>' + rendered
         try:
-            page = core.build_page(profile, rendered, self.origin)
+            page = core.build_page(profile, rendered, self.origin, _folder_of(name), swaps)
         except core.NoReadmeContainer as error:
             return _message_page(200, "Nothing to replace", f"{error}. Create the profile repo (a public repo named exactly like the username) on GitHub first.")
         return 200, HTML, page.encode("utf-8")
+
+    def _swaps(self, query):
+        """`swap=<path in README>|<image to show>` pairs. Targets must be images in this repo."""
+        swaps = {}
+        for pair in query.get("swap", []):
+            original, _, target = pair.partition("|")
+            if original and target and core.safe_image_path(self.root, target):
+                swaps[original] = target
+        return swaps
 
     def _rendered_readme(self, text):
         """Return (html, warning). html is None when nothing could be rendered."""

@@ -11,22 +11,28 @@ Python 3 standard library only, nothing to install. Your browser opens on `http:
 
 ## How it works
 
-- Downloads the profile page of the chosen user, then swaps its README section for this repo's `README.md`, rendered by GitHub's own markdown API. Theme, fonts and layout are GitHub's.
+- Downloads the profile page of the chosen user, then swaps its README section for this repo's `README.md` (or another README you pick), rendered by GitHub's own markdown API. Theme, fonts and layout are GitHub's.
 - Images in the README (e.g. `assets/banner.svg`) are served from this repo, so unpushed images show up too.
-- Saving `README.md` or any image reloads the preview and keeps your scroll position. Editing the previewer itself works too: UI files (`static/`) reload the page, and Python files restart the server and then reload the page.
+- Saving a README or any image reloads the preview and keeps your scroll position. Editing the previewer itself works too: UI files (`static/`) reload the page, and Python files restart the server and then reload the page.
 
-## The top bar
+## The panel
 
 | Control | What it does |
 |---|---|
 | Profile + Show | View any GitHub username with your README in it. Each username is downloaded once and cached. |
 | Refresh profile | Download that profile page again. |
-| README | Shown when the repo root has more than one README (`README.md`, `README-v2.md`, …). Pick which file to preview. |
-| Theme | Auto (system), Light or Dark buttons. Sets GitHub's own theme, so SVGs that follow `prefers-color-scheme` switch too. |
+| README | Pick which file to preview: `README.md`, other READMEs in the repo root (`README-v2.md`, …) and the saved versions in `versions/`. Image paths are read from the file's own folder, as on GitHub, so `../assets/…` works in `versions/`. |
+| Theme | Auto (system), Light or Dark. Sets GitHub's own theme, so SVGs that follow `prefers-color-scheme` switch too. |
 | Display | Desktop, tablet or phone. |
-| Image version | One button per version of an image your README uses (`banner-v1.0.svg`, `banner-v1.1.svg`, …; the `-vX.Y` part is ignored; versions are looked for in the same folder as the image, inside `assets/`). Click one to preview it in place of the README's image, without editing. "README" shows it as written. |
+| Images | Try another image in place of one the README uses, without editing it. Pick a slot, then an image. A ● marks slots you changed; "Reset all" shows the README as written. |
+| Panel | Dock the panel at the top or on the left. |
 
-The small tab under the bar hides it, so the preview gets the full height. Click it again to bring the bar back. The tool remembers that, and your theme, display and README choice.
+**Image slots**
+
+- **Banners:** every image the README uses from `assets/banners/`, including the `<picture>` sources, so desktop, tablet and mobile each get a slot. A slot offers every banner in `assets/banners/` (all version folders) whose name starts with its own, so `banner-desktop` also offers `banner-desktop-slim`.
+- **Icons:** every image the README uses from `assets/icons/`, named after the heading it sits in. A slot offers every image in `assets/icons/`, subfolders included. To try a new icon, drop it in that folder; it doesn't need to be committed.
+
+Drag the panel's inner edge to resize it; double-click the edge to reset. The tab on the edge hides the panel so the preview gets the full space. The tool remembers the panel's position, size and visibility, your theme, display and README, and the images you picked.
 
 ## Good to know
 

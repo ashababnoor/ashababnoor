@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import preview_app  # noqa: E402
 import preview_core as core  # noqa: E402
 
+SVG = "<svg xmlns='http://www.w3.org/2000/svg'/>"
 PROFILE = (
     "<html><head><title>profile</title></head><body>"
     '<article class="markdown-body entry-content"><p>OLD</p></article></body></html>'
@@ -43,7 +44,7 @@ class AppTestCase(unittest.TestCase):
         self.root = Path(self._tmp.name).resolve()
         (self.root / "README.md").write_text("hello")
         (self.root / "assets").mkdir()
-        (self.root / "assets" / "a.svg").write_text("<svg xmlns='http://www.w3.org/2000/svg'/>")
+        (self.root / "assets" / "a.svg").write_text(SVG)
         self.net = FakeNetwork()
         self.app = preview_app.PreviewApp(
             root=self.root,
@@ -139,13 +140,15 @@ class PageRoute(AppTestCase):
         self.assertEqual(status, 200)
         self.assertIn("no README section", body)
 
-    def test_swaps_the_first_image_when_asked_and_ignores_unsafe_paths(self):
-        self.net.render_markdown = lambda text, context: '<img src="assets/a.svg"><img src="assets/b.svg">'
+    def test_swaps_images_by_original_path_and_ignores_unsafe_targets(self):
+        (self.root / "assets" / "b.svg").write_text(SVG)
+        self.net.render_markdown = lambda text, context: '<img src="assets/a.svg">'
         self.app.render_markdown = self.net.render_markdown
-        _s, _c, body = self.get("/page?user=someone&img=assets/a.svg")
-        self.assertIn('src="/repo/assets/a.svg"', body)
-        _s, _c, body = self.get("/page?user=someone&img=../../etc/passwd.png")
+        _s, _c, body = self.get("/page?user=someone&swap=assets/a.svg|assets/b.svg")
+        self.assertIn('src="/repo/assets/b.svg" data-preview-src="assets/a.svg"', body)
+        _s, _c, body = self.get("/page?user=someone&swap=assets/a.svg|../../etc/passwd.png")
         self.assertNotIn("passwd", body)
+        self.assertIn('src="/repo/assets/a.svg"', body)
 
     def test_falls_back_to_the_last_good_render_when_rendering_fails(self):
         self.get("/page?user=someone")
@@ -166,11 +169,16 @@ class PageRoute(AppTestCase):
 class ReadmeChoice(AppTestCase):
     def setUp(self):
         super().setUp()
-        (self.root / "README-v2.md").write_text('v2 text <img src="assets/a.svg">')
+        (self.root / "assets" / "icons").mkdir()
+        for name in ("x.svg", "y.svg"):
+            (self.root / "assets" / "icons" / name).write_text(SVG)
+        (self.root / "README-v2.md").write_text('v2 text\n### <img src="assets/icons/x.svg"> Hi')
+        (self.root / "versions").mkdir()
+        (self.root / "versions" / "v1.0.md").write_text('old <img src="../assets/a.svg">')
 
     def test_state_lists_the_readme_variants(self):
         state = json.loads(self.app.handle("/api/state")[2])
-        self.assertEqual(state["readmes"], ["README.md", "README-v2.md"])
+        self.assertEqual(state["readmes"], ["README.md", "README-v2.md", "versions/v1.0.md"])
 
     def test_page_shows_the_chosen_readme_and_defaults_to_readme_md(self):
         _s, _c, body = self.get("/page?user=someone&readme=README-v2.md")
@@ -183,11 +191,18 @@ class ReadmeChoice(AppTestCase):
             status, _c, _body = self.get("/page?user=someone&readme=" + bad)
             self.assertEqual(status, 400, bad)
 
-    def test_state_image_versions_come_from_the_chosen_readme(self):
-        default = json.loads(self.app.handle("/api/state")[2])["images"]
-        chosen = json.loads(self.app.handle("/api/state?readme=README-v2.md")[2])["images"]
+    def test_state_image_slots_come_from_the_chosen_readme(self):
+        default = json.loads(self.app.handle("/api/state")[2])["slots"]
+        chosen = json.loads(self.app.handle("/api/state?readme=README-v2.md")[2])["slots"]
         self.assertEqual(default, [])
-        self.assertEqual(chosen, ["assets/a.svg"])
+        self.assertEqual(chosen, [{"id": "assets/icons/x.svg", "group": "Icons", "label": "Hi",
+                                   "options": ["assets/icons/x.svg", "assets/icons/y.svg"]}])
+
+    def test_page_resolves_images_of_a_saved_version_from_its_folder(self):
+        self.net.render_markdown = lambda text, context: text
+        self.app.render_markdown = self.net.render_markdown
+        _s, _c, body = self.get("/page?user=someone&readme=versions/v1.0.md")
+        self.assertIn('src="/repo/assets/a.svg"', body)
 
     def test_state_changes_when_another_readme_is_edited(self):
         first = json.loads(self.app.handle("/api/state")[2])["fingerprint"]
@@ -241,7 +256,7 @@ class ShellAndState(AppTestCase):
         (self.root / "README.md").write_text("different and longer")
         _s, _c, second = self.get("/api/state")
         self.assertNotEqual(json.loads(first)["fingerprint"], json.loads(second)["fingerprint"])
-        self.assertIn("assets/a.svg", json.loads(first)["images"])
+        self.assertIn("slots", json.loads(first))
 
 
     def test_static_files_are_served_but_cannot_escape_the_static_folder(self):

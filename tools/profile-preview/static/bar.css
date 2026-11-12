@@ -1,32 +1,125 @@
-/* The bar uses the browser's system colors, so it follows light/dark on its own.
+/* The panel uses the browser's system colors, so it follows light/dark on its own.
    Softer shades are mixed from those colors; the preview itself is GitHub's. */
 :root {
   --soft: color-mix(in srgb, CanvasText 8%, Canvas);
   --softer: color-mix(in srgb, CanvasText 5%, Canvas);
   --muted: color-mix(in srgb, CanvasText 60%, Canvas);
+  --hover: color-mix(in srgb, CanvasText 13%, Canvas);
   --accent: AccentColor;
+  --panel-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 2px 8px -4px rgb(0 0 0 / 0.12);
 }
 
-html, body { height: 100%; margin: 0; }
-body { display: flex; flex-direction: column; font: 13px/1.4 system-ui, -apple-system, sans-serif; background: var(--softer); color: CanvasText; }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font: 13px/1.4 system-ui, -apple-system, sans-serif;
+  background: var(--softer);
+  color: CanvasText;
+}
+
+body[data-dock="left"] {
+  flex-direction: row;
+}
+
+/* While dragging the panel edge, the iframe must not swallow the pointer. */
+body.resizing {
+  user-select: none;
+}
+
+body.resizing #frame {
+  pointer-events: none;
+}
+
+body.resizing[data-dock="top"] {
+  cursor: row-resize;
+}
+
+body.resizing[data-dock="left"] {
+  cursor: col-resize;
+}
+
+
+/* ---- Panel ------------------------------------------------------------ */
 
 #bar {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 10;
+  flex: none;
+  background: Canvas;
+  box-shadow: var(--panel-shadow);
+}
+
+#bar-body {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px 18px;
   padding: 10px 16px;
-  background: Canvas;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 2px 8px -4px rgb(0 0 0 / 0.12);
 }
 
-#bar label { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 500; }
-#user-form { display: inline-flex; align-items: center; gap: 8px; margin: 0; }
+/* Docked on the left: a column of groups, label above each control. */
+body[data-dock="left"] #bar {
+  height: 100%;
+  width: 300px;
+}
 
-input, button {
+body[data-dock="left"] #bar-body {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 16px;
+  padding: 16px;
+}
+
+body[data-dock="left"] .group {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+body[data-dock="left"] #user-form {
+  flex-wrap: wrap;
+}
+
+body[data-dock="left"] #user-form label {
+  flex: 1 1 100%;
+}
+
+body[data-dock="left"] #user-form input {
+  flex: 1;
+  width: auto;
+  min-width: 0;
+}
+
+body[data-dock="left"] #status {
+  margin: auto 0 0;
+}
+
+#bar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+#user-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+input, button, select {
   font: inherit;
   color: CanvasText;
   background: var(--soft);
@@ -35,61 +128,303 @@ input, button {
   padding: 6px 10px;
   outline: none;
 }
-input { width: 11rem; }
-button { cursor: pointer; font-weight: 500; }
-button:hover { background: color-mix(in srgb, CanvasText 13%, Canvas); }
-input:focus-visible, button:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
-button[type="submit"] { background: var(--accent); color: AccentColorText; }
-button[type="submit"]:hover { background: color-mix(in srgb, var(--accent) 85%, black); }
 
-.group { display: inline-flex; align-items: center; gap: 8px; }
-.group .label { color: var(--muted); font-weight: 500; }
-.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
-.seg button { padding: 5px 10px; }
-.seg button[aria-pressed="true"] { background: var(--accent); color: AccentColorText; }
-/* The tab hangs below the bar's bottom edge, and stays visible when the bar is hidden. */
+input {
+  width: 11rem;
+}
+
+/* Buttons can carry a small line icon before their text. */
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--hover);
+}
+
+/* Our own chevron (a V like the panel tab's), set as far from the right edge as the
+   text is from the left. The browser's arrow is hidden. */
+
+.select {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.select select {
+  appearance: none;
+  flex: 1;
+  min-width: 0;
+  padding-right: 30px;
+  cursor: pointer;
+}
+
+.select::after {
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+select:hover {
+  background-color: var(--hover);
+}
+
+input:focus-visible, button:focus-visible, select:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.group .label {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+button > svg.icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.seg button {
+  padding: 5px 10px;
+}
+
+/* The selected option: a thin grey outline and a fill a shade darker than the others. */
+.seg button[aria-pressed="true"] {
+  background: light-dark(var(--hover), color-mix(in srgb, CanvasText 3%, Canvas));
+  color: CanvasText;
+  border-color: color-mix(in srgb, CanvasText 40%, Canvas);
+}
+
+/* Image alternatives: icons show a small preview next to their name. */
+/* Top dock: the label, dropdown and Reset stay on one line at the top; only the image
+   buttons wrap, into rows to the right. */
+
+/* fill the row's spare width, not the left panel's height */
+body[data-dock="top"] #slots-wrap {
+  flex: 1 1 auto;
+}
+
+#slots-wrap {
+  align-items: flex-start;
+}
+
+/* lines up with the text inside the buttons */
+#slots-wrap > .label {
+  padding-top: 7px;
+}
+
+.slot-row {
+  display: flex;
+  flex: none;
+  gap: 6px;
+  min-width: 0;
+}
+
+#reset-swaps {
+  white-space: nowrap;
+}
+
+body[data-dock="top"] #options {
+  flex: 1 1 auto;
+}
+
+body[data-dock="left"] #slots-wrap {
+  align-items: stretch;
+}
+
+body[data-dock="left"] #slots-wrap > .label {
+  padding-top: 0;
+}
+
+body[data-dock="left"] .slot-row .select {
+  flex: 1;
+}
+
+#options img {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+#status {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#status.error {
+  color: MarkText;
+  background: Mark;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+
+/* ---- Resize handle: a thin strip along the panel's inner edge --------- */
+
+#bar-resize {
+  position: absolute;
+  z-index: 1;
+}
+
+#bar-resize:hover,
+body.resizing #bar-resize {
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+body[data-dock="top"] #bar-resize {
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 6px;
+  cursor: row-resize;
+}
+
+body[data-dock="left"] #bar-resize {
+  top: 0;
+  bottom: 0;
+  right: -3px;
+  width: 6px;
+  cursor: col-resize;
+}
+
+
+/* ---- Hide/show tab: hangs off the panel's edge, stays visible when hidden */
+
 #bar-toggle {
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 52px;
-  height: 18px;
+  z-index: 2;
   padding: 0;
   display: grid;
   place-items: center;
   background: Canvas;
   color: var(--muted);
   border: 0;
-  border-radius: 0 0 10px 10px;
   box-shadow: 0 2px 6px -2px rgb(0 0 0 / 0.18);
 }
-#bar-toggle:hover { color: CanvasText; background: Canvas; }
+
+#bar-toggle:hover {
+  color: CanvasText;
+  background: Canvas;
+}
+
+body[data-dock="top"] #bar-toggle {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 18px;
+  border-radius: 0 0 10px 10px;
+}
+
+body[data-dock="left"] #bar-toggle {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 52px;
+  border-radius: 0 10px 10px 0;
+}
+
 #bar-toggle .chev {
   width: 6px;
   height: 6px;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
-  transform: translateY(2px) rotate(-135deg); /* points up: click to hide */
 }
-#bar.collapsed #bar-toggle .chev { transform: translateY(-2px) rotate(45deg); } /* points down: click to show */
-#bar.collapsed { padding: 0; min-height: 0; height: 0; box-shadow: none; }
-#bar.collapsed > :not(#bar-toggle) { display: none; }
-#status { margin-left: auto; color: var(--muted); font-size: 12px; }
-#status.error { color: MarkText; background: Mark; padding: 2px 8px; border-radius: 999px; }
 
-/* The preview sits on a soft stage so narrow widths read as a device, not a box. */
+/* The chevron points the way the panel will move: in to hide, out to show. */
+body[data-dock="top"] #bar-toggle .chev {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+body[data-dock="top"] #bar.collapsed #bar-toggle .chev {
+  transform: translateY(-2px) rotate(45deg);
+}
+
+body[data-dock="left"] #bar-toggle .chev {
+  transform: translateX(2px) rotate(135deg);
+}
+
+body[data-dock="left"] #bar.collapsed #bar-toggle .chev {
+  transform: translateX(-2px) rotate(-45deg);
+}
+
+#bar.collapsed {
+  box-shadow: none;
+}
+
+#bar.collapsed #bar-body,
+#bar.collapsed #bar-resize {
+  display: none;
+}
+
+body[data-dock="top"] #bar.collapsed {
+  height: 0 !important;
+}
+
+body[data-dock="left"] #bar.collapsed {
+  width: 0 !important;
+}
+
+
+/* ---- Stage: the preview sits on a soft stage so narrow widths read as a device */
+
+#stage {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
 #frame {
   flex: 1;
   width: 100%;
   border: 0;
   background: Canvas;
 }
+
 #frame[data-width="tablet"], #frame[data-width="phone"] {
-  align-self: center;
-  margin: 18px 0;
+  flex-shrink: 0;
+  margin: 18px auto; /* auto centres it, and starts it at the left edge when the stage is narrower */
   border-radius: 14px;
   box-shadow: 0 6px 24px -10px rgb(0 0 0 / 0.25);
 }
-#frame[data-width="tablet"] { width: 768px; }
-#frame[data-width="phone"] { width: 390px; }
+
+#frame[data-width="tablet"] {
+  width: 768px;
+}
+
+#frame[data-width="phone"] {
+  width: 390px;
+}

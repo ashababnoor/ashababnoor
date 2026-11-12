@@ -77,60 +77,109 @@ class SafeImagePath(unittest.TestCase):
         self.assertIsNone(core.safe_image_path(self.root, "assets/link.svg"))
 
 
-class ListVersions(unittest.TestCase):
-    def make(self, readme):
+class ResolveSrc(unittest.TestCase):
+    def test_resolves_a_source_from_the_readmes_own_folder(self):
+        self.assertEqual(core.resolve_src("assets/a.svg", ""), "assets/a.svg")
+        self.assertEqual(core.resolve_src("./assets/a.svg", ""), "assets/a.svg")
+        self.assertEqual(core.resolve_src("../assets/a.svg", "versions"), "assets/a.svg")
+        self.assertEqual(core.resolve_src("../github-metrics.svg?v=1", "versions"), "github-metrics.svg")
+
+    def test_decodes_url_escapes_and_html_entities_to_the_real_file_name(self):
+        self.assertEqual(core.resolve_src("assets/a%20b.svg", ""), "assets/a b.svg")
+        self.assertEqual(core.resolve_src("assets/a&amp;b.svg", ""), "assets/a&b.svg")
+
+    def test_returns_none_outside_the_repo_and_for_remote_or_rooted_sources(self):
+        for src, base in (("../a.svg", ""), ("../../a.svg", "versions"), ("https://x.com/a.png", ""),
+                          ("//x.com/a.png", ""), ("/rooted.png", ""), ("data:image/png;base64,AA", "")):
+            self.assertIsNone(core.resolve_src(src, base), src)
+
+
+class ListSlots(unittest.TestCase):
+    FILES = (
+        "assets/banners/v1/banner-desktop-v1.0.svg", "assets/banners/v1/banner-desktop-slim-v1.0.svg",
+        "assets/banners/v1/banner-tablet-v1.0.svg", "assets/banners/v1/banner-mobile-v1.0.svg",
+        "assets/banners/v2/banner-desktop-v2.0.svg", "assets/banners/v2/notes.txt",
+        "assets/icons/user.svg", "assets/icons/link.svg", "assets/icons/try/mail.svg",
+        "assets/banner-desktop-v0.svg", "github-metrics.svg",
+    )
+    README = (
+        "<picture>\n"
+        '  <source media="(max-width: 600px)" srcset="{p}assets/banners/v1/banner-mobile-v1.0.svg">\n'
+        '  <source media="(min-width: 601px)" srcset="{p}assets/banners/v1/banner-tablet-v1.0.svg">\n'
+        '  <img src="{p}assets/banners/v1/banner-desktop-v1.0.svg" width="100%">\n'
+        "</picture>\n\n"
+        '### <img src="{p}assets/icons/user.svg" width="18" alt=""> About Me\n\n'
+        '<img src="{p}github-metrics.svg">\n\n'
+        '### <img src="{p}assets/icons/link.svg" width="18" alt=""> Connect With Me\n'
+    )
+
+    def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
-        root = Path(tmp.name)
-        for rel in ("assets/banner-v1.0.svg", "assets/banner-v1.1.svg", "assets/banner-v2.png",
-                    "assets/other.png", "_assets/banner-v1.0.svg", "docs/banner-v9.svg"):
-            (root / rel).parent.mkdir(parents=True, exist_ok=True)
-            (root / rel).write_bytes(b"x")
-        (root / "assets" / "notes.txt").write_text("x")
-        (root / "README.md").write_text(readme)
-        return root
+        self.root = Path(tmp.name)
+        for rel in self.FILES:
+            (self.root / rel).parent.mkdir(parents=True, exist_ok=True)
+            (self.root / rel).write_bytes(b"x")
 
-    def test_lists_every_version_of_a_readme_image_from_assets_only(self):
-        root = self.make('<img src="assets/banner-v1.0.svg" width="100%">')
-        self.assertEqual(
-            core.list_versions(root, root.joinpath("README.md").read_text()),
-            ["assets/banner-v1.0.svg", "assets/banner-v1.1.svg", "assets/banner-v2.png"],
-        )
+    def slots(self, text=None, base=""):
+        return core.list_slots(self.root, self.README.format(p="") if text is None else text, base)
 
-    def test_finds_markdown_images_and_ignores_remote_ones(self):
-        root = self.make("![b](./assets/banner-v1.1.svg)\n![x](https://example.com/other.png)")
-        self.assertEqual(
-            core.list_versions(root, root.joinpath("README.md").read_text()),
-            ["assets/banner-v1.0.svg", "assets/banner-v1.1.svg", "assets/banner-v2.png"],
-        )
+    def test_banner_slots_come_in_display_order(self):
+        banners = [(s["label"], s["id"]) for s in self.slots() if s["group"] == "Banners"]
+        self.assertEqual(banners, [
+            ("Desktop", "assets/banners/v1/banner-desktop-v1.0.svg"),
+            ("Tablet", "assets/banners/v1/banner-tablet-v1.0.svg"),
+            ("Mobile", "assets/banners/v1/banner-mobile-v1.0.svg"),
+        ])
 
-    def test_lists_versions_from_the_readme_images_own_folder_inside_assets(self):
-        root = self.make('<img src="assets/banners/v1/banner-desktop-v1.0.svg">')
-        for rel in ("assets/banners/v1/banner-desktop-v1.0.svg", "assets/banners/v1/banner-desktop-v1.1.svg",
-                    "assets/banners/v1/other.svg"):
-            (root / rel).parent.mkdir(parents=True, exist_ok=True)
-            (root / rel).write_bytes(b"x")
-        self.assertEqual(
-            core.list_versions(root, root.joinpath("README.md").read_text()),
-            ["assets/banners/v1/banner-desktop-v1.0.svg", "assets/banners/v1/banner-desktop-v1.1.svg"],
-        )
+    def test_a_banner_slot_offers_every_banner_whose_name_starts_with_its_own(self):
+        desktop = self.slots()[0]
+        self.assertEqual(desktop["options"], [
+            "assets/banners/v1/banner-desktop-v1.0.svg",
+            "assets/banners/v1/banner-desktop-slim-v1.0.svg",
+            "assets/banners/v2/banner-desktop-v2.0.svg",
+        ])
+        self.assertEqual(self.slots()[2]["options"], ["assets/banners/v1/banner-mobile-v1.0.svg"])
 
-    def test_ignores_readme_images_outside_assets(self):
-        root = self.make('<img src="docs/banner-v9.svg">')
-        self.assertEqual(core.list_versions(root, root.joinpath("README.md").read_text()), [])
+    def test_icon_slots_are_named_by_their_heading_and_offer_every_icon(self):
+        icons = [s for s in self.slots() if s["group"] == "Icons"]
+        self.assertEqual([(s["label"], s["id"]) for s in icons],
+                         [("About Me", "assets/icons/user.svg"), ("Connect With Me", "assets/icons/link.svg")])
+        self.assertEqual(icons[0]["options"],
+                         ["assets/icons/link.svg", "assets/icons/try/mail.svg", "assets/icons/user.svg"])
+
+    def test_an_icon_outside_a_heading_is_named_by_its_alt_text_or_file_name(self):
+        labels = [s["label"] for s in self.slots('<img src="assets/icons/user.svg" alt="Me"> <img src="assets/icons/link.svg">')]
+        self.assertEqual(labels, ["Me", "link"])
+
+    def test_alt_text_is_found_wherever_it_sits_in_the_tag(self):
+        labels = [s["label"] for s in self.slots('<img alt="Me" width="18" src="assets/icons/user.svg">')]
+        self.assertEqual(labels, ["Me"])
+
+    def test_data_src_attributes_are_not_image_sources(self):
+        self.assertEqual(self.slots('<img data-src="assets/icons/user.svg" src="https://x.com/y.png">'), [])
+
+    def test_images_outside_banners_and_icons_get_no_slot(self):
+        ids = [s["id"] for s in self.slots()]
+        self.assertNotIn("github-metrics.svg", ids)
+        self.assertEqual(self.slots('<img src="assets/banner-desktop-v0.svg">'), [])
+
+    def test_a_readme_in_versions_resolves_its_paths_from_that_folder(self):
+        self.assertEqual(self.slots(self.README.format(p="../"), "versions"), self.slots())
 
     def test_lists_nothing_when_the_readme_has_no_local_images(self):
-        root = self.make("# hi\n![x](https://example.com/other.png)")
-        self.assertEqual(core.list_versions(root, root.joinpath("README.md").read_text()), [])
+        self.assertEqual(self.slots("# hi\n![x](https://example.com/other.png)"), [])
 
 
 class RewriteRelativeSrcs(unittest.TestCase):
     def test_rewrites_relative_image_sources_to_the_local_route(self):
         html = '<img src="assets/banner.svg" width="100%">'
-        self.assertEqual(core.rewrite_relative_srcs(html), '<img src="/repo/assets/banner.svg" width="100%">')
+        self.assertEqual(core.rewrite_relative_srcs(html),
+                         '<img src="/repo/assets/banner.svg" data-preview-src="assets/banner.svg" width="100%">')
 
     def test_handles_dot_slash_and_single_quotes(self):
-        self.assertEqual(core.rewrite_relative_srcs("<img src='./a/b.png'>"), "<img src='/repo/a/b.png'>")
+        self.assertEqual(core.rewrite_relative_srcs("<img src='./a/b.png'>"),
+                         "<img src='/repo/a/b.png' data-preview-src=\"a/b.png\">")
 
     def test_rewrites_srcset_on_picture_sources_too(self):
         html = '<picture><source media="(max-width: 600px)" srcset="assets/m.svg"><img src="assets/d.svg"></picture>'
@@ -140,7 +189,7 @@ class RewriteRelativeSrcs(unittest.TestCase):
 
     def test_rewrites_each_candidate_in_a_srcset_list(self):
         out = core.rewrite_relative_srcs('<source srcset="a.png 1x, https://x.com/b.png 2x">')
-        self.assertEqual(out, '<source srcset="/repo/a.png 1x, https://x.com/b.png 2x">')
+        self.assertEqual(out, '<source srcset="/repo/a.png 1x, https://x.com/b.png 2x" data-preview-srcset="a.png">')
 
     def test_leaves_absolute_protocol_relative_data_and_rooted_sources_alone(self):
         for src in ("https://x.com/a.png", "http://x.com/a.png", "//x.com/a.png", "data:image/png;base64,AAAA", "/already/rooted.png"):
@@ -148,16 +197,30 @@ class RewriteRelativeSrcs(unittest.TestCase):
             self.assertEqual(core.rewrite_relative_srcs(html), html, src)
 
 
-class SwapImage(unittest.TestCase):
-    def test_replaces_the_image_that_is_another_version_of_the_chosen_one(self):
-        html = '<img src="/repo/assets/logo.png" alt="1"><img src="/repo/assets/banner-v1.0.svg" alt="2">'
-        out = core.swap_image(html, "assets/banner-v1.2.svg")
-        self.assertEqual(out, '<img src="/repo/assets/logo.png" alt="1"><img src="/repo/assets/banner-v1.2.svg" alt="2">')
+class RewriteWithBaseAndSwaps(unittest.TestCase):
+    def test_resolves_sources_from_the_readmes_folder(self):
+        out = core.rewrite_relative_srcs('<img src="../assets/a.svg?v=1">', base="versions")
+        self.assertEqual(out, '<img src="/repo/assets/a.svg?v=1" data-preview-src="assets/a.svg">')
 
-    def test_falls_back_to_the_first_image_when_none_matches(self):
-        html = '<img src="/repo/a.svg" alt="1"><img src="/repo/b.svg" alt="2">'
-        out = core.swap_image(html, "assets/new.svg")
-        self.assertEqual(out, '<img src="/repo/assets/new.svg" alt="1"><img src="/repo/b.svg" alt="2">')
+    def test_encodes_file_names_so_spaces_survive_in_src_and_srcset(self):
+        html = '<source srcset="assets/m.svg"><img src="assets/a%20b.svg">'
+        out = core.rewrite_relative_srcs(html, swaps={"assets/m.svg": "assets/m 2.svg"})
+        self.assertEqual(out, (
+            '<source srcset="/repo/assets/m%202.svg" data-preview-srcset="assets/m.svg">'
+            '<img src="/repo/assets/a%20b.svg" data-preview-src="assets/a b.svg">'
+        ))
+
+    def test_leaves_sources_that_would_leave_the_repo_alone(self):
+        self.assertEqual(core.rewrite_relative_srcs('<img src="../x.svg">'), '<img src="../x.svg">')
+
+    def test_swaps_img_and_picture_sources_by_their_original_path(self):
+        html = '<picture><source srcset="assets/m.svg"><img src="assets/d.svg"></picture><img src="assets/d.svg">'
+        out = core.rewrite_relative_srcs(html, swaps={"assets/d.svg": "assets/d2.svg", "assets/m.svg": "assets/m2.svg"})
+        self.assertEqual(out, (
+            '<picture><source srcset="/repo/assets/m2.svg" data-preview-srcset="assets/m.svg">'
+            '<img src="/repo/assets/d2.svg" data-preview-src="assets/d.svg"></picture>'
+            '<img src="/repo/assets/d2.svg" data-preview-src="assets/d.svg">'
+        ))
 
 
 class BuildPage(unittest.TestCase):
@@ -185,7 +248,7 @@ class BuildPage(unittest.TestCase):
 
     def test_rewrites_relative_images_inside_the_readme(self):
         out = core.build_page(self.PROFILE, '<img src="assets/x.svg">')
-        self.assertIn('<img src="/repo/assets/x.svg">', out)
+        self.assertIn('<img src="/repo/assets/x.svg" data-preview-src="assets/x.svg">', out)
 
     def test_raises_when_the_profile_has_no_readme_container(self):
         with self.assertRaises(core.NoReadmeContainer):
@@ -225,15 +288,22 @@ class ReadmeVersions(unittest.TestCase):
     def test_lists_readme_variants_in_the_repo_root_with_the_main_one_first(self):
         root = self.make(["README-v2.md", "README.md", "README-v10.md", "README-v3.md", "notes.md", "README.txt",
                           "versions/v1.0.md", "docs/README.md", ".README-hidden.md"])
-        self.assertEqual(core.list_readmes(root), ["README.md", "README-v2.md", "README-v3.md", "README-v10.md"])
+        self.assertEqual(core.list_readmes(root),
+                         ["README.md", "README-v2.md", "README-v3.md", "README-v10.md", "versions/v1.0.md"])
+
+    def test_lists_saved_versions_after_the_root_readmes(self):
+        root = self.make(["README.md", "README-v2.md", "versions/v10.0.md", "versions/v2.0.md", "versions/notes.txt"])
+        self.assertEqual(core.list_readmes(root), ["README.md", "README-v2.md", "versions/v2.0.md", "versions/v10.0.md"])
+        self.assertEqual(core.readme_path(root, "versions/v2.0.md"), root / "versions" / "v2.0.md")
+        self.assertIsNone(core.readme_path(root, "versions/../README.md"))
 
     def test_lists_nothing_when_there_is_no_readme_at_all(self):
         self.assertEqual(core.list_readmes(self.make(["notes.md"])), [])
 
     def test_resolves_only_listed_readme_names(self):
-        root = self.make(["README.md", "README-v2.md", "secret.md", "versions/v1.0.md"])
+        root = self.make(["README.md", "README-v2.md", "secret.md", "docs/README.md"])
         self.assertEqual(core.readme_path(root, "README-v2.md"), (root / "README-v2.md"))
-        for bad in ("secret.md", "../README.md", "versions/v1.0.md", "/etc/passwd", "README-v9.md", ""):
+        for bad in ("secret.md", "../README.md", "docs/README.md", "/etc/passwd", "README-v9.md", ""):
             self.assertIsNone(core.readme_path(root, bad), bad)
 
     def test_fingerprint_notices_edits_to_any_readme_variant(self):
