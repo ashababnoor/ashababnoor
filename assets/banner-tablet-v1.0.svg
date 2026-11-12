@@ -33,7 +33,7 @@
       <feGaussianBlur stdDeviation="2.4"/>
     </filter>
     <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="24"/>
+      <feGaussianBlur stdDeviation="24.0"/>
     </filter>
     <clipPath id="card"><rect width="600" height="168"/></clipPath>
   </defs>
@@ -42,17 +42,17 @@
     <rect class="bg" width="600" height="168"/>
     <g filter="url(#blur)">
       <ellipse class="blob1" cx="462" cy="32"  rx="110" ry="62"/>
-      <ellipse class="blob2" cx="545" cy="132" rx="95"  ry="52"/>
-      <ellipse class="blob3" cx="392" cy="150" rx="78"  ry="40"/>
+      <ellipse class="blob2" cx="545" cy="132" rx="95" ry="52"/>
+      <ellipse class="blob3" cx="392" cy="150" rx="78" ry="40"/>
     </g>
   </g>
 
-  <text class="path" x="32" y="33.5" font-size="15" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+  <text class="path" x="31.5" y="32.81" font-size="15" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
 
   <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
-    <text class="name" x="30" y="83.5" font-size="34" font-weight="700" letter-spacing="-1">Ahmed Shabab Noor</text>
-    <text class="role" x="32" y="109.5" font-size="16" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+    <text class="name" x="31.25" y="81.12" font-size="34" font-weight="700" letter-spacing="-1">Ahmed Shabab Noor</text>
+    <text class="role" x="30.75" y="107.38" font-size="18" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
   </g>
-  <text class="halo" filter="url(#soft)" x="32" y="143.5" font-size="14.5" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
-  <text class="tagr" x="32" y="143.5" font-size="14.5" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+  <text class="halo" filter="url(#soft)" x="30.5" y="143.69" font-size="15" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+  <text class="tagr" x="30.5" y="143.69" font-size="15" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
 </svg>
