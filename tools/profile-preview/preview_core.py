@@ -102,16 +102,30 @@ def _local_readme_images(readme_text):
 
 
 def list_versions(root, readme_text):
-    """Images in assets/ that are versions of an image the README uses (v-suffix ignored)."""
-    bases = {_base_name(src) for src in _local_readme_images(readme_text)}
-    folder = Path(root) / "assets"
-    if not bases or not folder.is_dir():
-        return []
-    return sorted(
-        f"assets/{p.name}"
-        for p in folder.iterdir()
-        if p.is_file() and p.suffix.lower() in IMAGE_EXTS and _base_name(p.name) in bases
-    )[:MAX_LISTED_IMAGES]
+    """Versions of each image the README uses (v-suffix ignored), looked up in that image's own folder.
+
+    Only folders inside assets/ are searched, e.g. assets/ or assets/banners/v1/.
+    """
+    wanted = {}  # folder (repo-relative) -> base names used by the README there
+    for src in _local_readme_images(readme_text):
+        folder = Path(src.split("?")[0].split("#")[0]).parent
+        if folder.parts[:1] == (".",):
+            folder = Path(*folder.parts[1:])
+        if folder.parts[:1] != ("assets",) or ".." in folder.parts:
+            continue
+        wanted.setdefault(folder.as_posix(), set()).add(_base_name(src))
+
+    found = []
+    for folder, bases in wanted.items():
+        directory = Path(root) / folder
+        if not directory.is_dir():
+            continue
+        found += [
+            f"{folder}/{p.name}"
+            for p in directory.iterdir()
+            if p.is_file() and p.suffix.lower() in IMAGE_EXTS and _base_name(p.name) in bases
+        ]
+    return sorted(found)[:MAX_LISTED_IMAGES]
 
 
 def _local_src(rel, origin=""):

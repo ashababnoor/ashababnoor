@@ -104,6 +104,21 @@ class ListVersions(unittest.TestCase):
             ["assets/banner-v1.0.svg", "assets/banner-v1.1.svg", "assets/banner-v2.png"],
         )
 
+    def test_lists_versions_from_the_readme_images_own_folder_inside_assets(self):
+        root = self.make('<img src="assets/banners/v1/banner-desktop-v1.0.svg">')
+        for rel in ("assets/banners/v1/banner-desktop-v1.0.svg", "assets/banners/v1/banner-desktop-v1.1.svg",
+                    "assets/banners/v1/other.svg"):
+            (root / rel).parent.mkdir(parents=True, exist_ok=True)
+            (root / rel).write_bytes(b"x")
+        self.assertEqual(
+            core.list_versions(root, root.joinpath("README.md").read_text()),
+            ["assets/banners/v1/banner-desktop-v1.0.svg", "assets/banners/v1/banner-desktop-v1.1.svg"],
+        )
+
+    def test_ignores_readme_images_outside_assets(self):
+        root = self.make('<img src="docs/banner-v9.svg">')
+        self.assertEqual(core.list_versions(root, root.joinpath("README.md").read_text()), [])
+
     def test_lists_nothing_when_the_readme_has_no_local_images(self):
         root = self.make("# hi\n![x](https://example.com/other.png)")
         self.assertEqual(core.list_versions(root, root.joinpath("README.md").read_text()), [])

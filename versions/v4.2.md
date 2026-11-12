@@ -1,8 +1,8 @@
 <div align="center">
   <picture>
-    <source media="(max-width: 600px)" srcset="assets/banner-mobile-v1.0.svg">
-    <source media="(min-width: 601px) and (max-width: 1100px)" srcset="assets/banner-tablet-v1.0.svg">
-    <img src="assets/banner-desktop-v1.0.svg" alt="Ahmed Shabab Noor — Software and Data Engineer" width="100%" />
+    <source media="(max-width: 600px)" srcset="assets/banners/v1/banner-mobile-v1.0.svg">
+    <source media="(min-width: 601px) and (max-width: 1100px)" srcset="assets/banners/v1/banner-tablet-v1.0.svg">
+    <img src="assets/banners/v1/banner-desktop-v1.0.svg" alt="Ahmed Shabab Noor — Software and Data Engineer" width="100%" />
   </picture>
 </div>
 
