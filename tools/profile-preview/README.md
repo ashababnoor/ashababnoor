@@ -11,8 +11,8 @@ Python 3 standard library only, nothing to install. Your browser opens on `http:
 
 ## How it works
 
-- Downloads the profile page of the chosen user, then swaps its README section for this repo's `README.md` (or another README you pick), rendered by GitHub's own markdown API. Theme, fonts and layout are GitHub's.
-- Images in the README (e.g. `assets/banner.svg`) are served from this repo, so unpushed images show up too.
+- Downloads the profile page of the chosen user, then swaps its README section for this repo's `README.md` (or another README you pick), rendered by GitHub's own markdown API the way GitHub renders a README file. Theme, fonts and layout are GitHub's.
+- Images in the README (e.g. `assets/icons/user.svg`) are served from this repo, so unpushed images show up too.
 - Saving a README or any image reloads the preview and keeps your scroll position. Editing the previewer itself works too: UI files (`static/`) reload the page, and Python files restart the server and then reload the page.
 
 ## The panel
@@ -21,11 +21,11 @@ Python 3 standard library only, nothing to install. Your browser opens on `http:
 |---|---|
 | Profile + Show | View any GitHub username with your README in it. Each username is downloaded once and cached. |
 | Refresh profile | Download that profile page again. |
-| README | Pick which file to preview: `README.md`, other READMEs in the repo root (`README-v2.md`, …) and the saved versions in `versions/`. Image paths are read from the file's own folder, as on GitHub, so `../assets/…` works in `versions/`. |
 | Theme | Auto (system), Light or Dark. Sets GitHub's own theme, so SVGs that follow `prefers-color-scheme` switch too. |
 | Display | Desktop, tablet or phone. |
-| Images | Try another image in place of one the README uses, without editing it. Pick a slot, then an image. A ● marks slots you changed; "Reset all" shows the README as written. |
 | Panel | Dock the panel at the top or on the left. |
+| README | Pick which file to preview: `README.md`, other READMEs in the repo root (`README-v2.md`, …) and the saved versions in `versions/`. Image paths are read from the file's own folder, as on GitHub, so `../assets/…` works in `versions/`. |
+| Images | Try another image in place of one the README uses, without editing it. Pick a slot, then an image. A ● marks slots you changed; "Reset all" shows the README as written. |
 
 **Image slots**
 
