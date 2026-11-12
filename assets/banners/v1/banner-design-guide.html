@@ -1,0 +1,2177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Banner design guide</title>
+  <meta name="description" content="Design system for the profile banners: variants, typography, spacing, margins, alignment and colour.">
+
+  <!-- Page fonts. The page falls back to system fonts when offline.
+       Type samples of the banners never use these: they use the banners' own system stacks. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <style>
+    /* ==========================================================
+       Design tokens
+
+       Layout: a spec sheet. Section titles sit in a narrow left
+       column and the work runs on the right; architectural
+       dimension lines are the one recurring motif.
+
+       Light values are the default. Dark values apply when the
+       viewer's system is dark (unless Light is chosen), or when
+       Dark is chosen with the theme switch.
+       ========================================================== */
+
+    :root {
+      color-scheme: light;
+
+      /* Surfaces and text: neutrals with a slight blue bias, like the banners */
+      --paper: #FBFCFD;
+      --panel: #F2F4F7;
+      --rule: #E2E6ED;
+      --ink: #0B1220;
+      --ink-2: #4B5568;
+      --ink-3: #576071;
+      --shadow: rgba(11, 18, 32, 0.14);
+
+      /* Accent: dimension lines, taken from the banners' indigo glow */
+      --dim: #4F46E5;
+
+      /* The banners' own prompt green, for samples */
+      --prompt: #15803D;
+
+      /* Measurement colours used in the spacing diagrams */
+      --margin-fill: rgba(219, 39, 119, 0.18);
+      --margin-line: #BE185D;
+      --group-fill: rgba(217, 119, 6, 0.26);
+      --group-line: #B45309;
+      --inner-fill: rgba(8, 145, 178, 0.26);
+      --inner-line: #0E7490;
+      --ink-line: #4F46E5;
+      --label-halo: rgba(255, 255, 255, 0.92);
+
+      /* Type */
+      --font-display: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+      /* The banners' own font stacks, for type samples */
+      --banner-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --banner-mono: 'Fira Code', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+      --radius: 12px;
+      --page-width: 1180px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+
+        --paper: #0B0C0F;
+        --panel: #14161B;
+        --rule: #252932;
+        --ink: #E6E8EC;
+        --ink-2: #B8BCC5;
+        --ink-3: #9DA3AE;
+        --shadow: rgba(0, 0, 0, 0.6);
+        --dim: #A5B4FC;
+        --prompt: #4ADE80;
+
+        --margin-fill: rgba(244, 114, 182, 0.20);
+        --margin-line: #F472B6;
+        --group-fill: rgba(251, 191, 36, 0.22);
+        --group-line: #FBBF24;
+        --inner-fill: rgba(34, 211, 238, 0.22);
+        --inner-line: #22D3EE;
+        --ink-line: #A5B4FC;
+        --label-halo: rgba(11, 12, 15, 0.92);
+      }
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+
+      --paper: #0B0C0F;
+      --panel: #14161B;
+      --rule: #252932;
+      --ink: #E6E8EC;
+      --ink-2: #B8BCC5;
+      --ink-3: #9DA3AE;
+      --shadow: rgba(0, 0, 0, 0.6);
+      --dim: #A5B4FC;
+      --prompt: #4ADE80;
+
+      --margin-fill: rgba(244, 114, 182, 0.20);
+      --margin-line: #F472B6;
+      --group-fill: rgba(251, 191, 36, 0.22);
+      --group-line: #FBBF24;
+      --inner-fill: rgba(34, 211, 238, 0.22);
+      --inner-line: #22D3EE;
+      --ink-line: #A5B4FC;
+      --label-halo: rgba(11, 12, 15, 0.92);
+    }
+
+
+    /* ==========================================================
+       Base
+       ========================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 72px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Paints the band above the sticky bar on phones with a notch */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      height: env(safe-area-inset-top, 0px);
+      z-index: 20;
+      background: var(--paper);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      text-wrap: balance;
+    }
+
+    p {
+      margin: 0;
+      max-width: 65ch;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--dim);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .page {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      padding-block: 0 120px;
+    }
+
+    .note {
+      color: var(--ink-3);
+      font-size: 14px;
+    }
+
+
+    /* ==========================================================
+       Top bar: section links and theme switch
+       ========================================================== */
+
+    .topbar {
+      position: sticky;
+      top: env(safe-area-inset-top, 0px);
+      z-index: 10;
+      background: color-mix(in srgb, var(--paper) 86%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding-block: 10px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+
+    .topbar nav {
+      display: flex;
+      flex: 1;
+      gap: 22px;
+      min-width: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    .topbar nav a {
+      color: var(--ink-3);
+      text-decoration: none;
+    }
+
+    .topbar nav a:hover {
+      color: var(--ink);
+    }
+
+    .theme-switch {
+      display: flex;
+      flex-shrink: 0;
+      padding: 3px;
+      background: var(--panel);
+      border-radius: 9px;
+    }
+
+    .theme-switch button {
+      padding: 3px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink-3);
+      font: 500 12px var(--font-body);
+      cursor: pointer;
+    }
+
+    .theme-switch button[aria-pressed="true"] {
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 0 1px 2px var(--shadow);
+    }
+
+
+    /* ==========================================================
+       Hero: title, key facts and the desktop banner drawn with
+       its dimensions
+       ========================================================== */
+
+    .hero {
+      display: grid;
+      gap: 28px;
+      padding-block: 72px 56px;
+    }
+
+    .eyebrow {
+      font: 500 14px var(--font-mono);
+      color: var(--prompt);
+    }
+
+    /* Coloured like a terminal: green command, grey $ and value, indigo flag */
+    .eyebrow .dollar,
+    .eyebrow .value {
+      color: var(--ink-2);
+    }
+
+    .eyebrow .flag {
+      color: var(--dim);
+    }
+
+    /* The title with its version chip beside it */
+    .title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 18px;
+    }
+
+    .version-chip {
+      padding: 4px 12px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--ink-2);
+      font: 500 14px var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 76px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.035em;
+    }
+
+    .hero .lead {
+      color: var(--ink-2);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.5;
+    }
+
+    .hero-text {
+      display: grid;
+      gap: 16px;
+    }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 36px;
+      margin: 0;
+    }
+
+    .facts div {
+      display: grid;
+      gap: 2px;
+    }
+
+    .facts dt {
+      font: 500 11px var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    .facts dd {
+      margin: 0;
+      font: 600 20px var(--font-display);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hero-figure {
+      margin: 8px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    /* The banner with a width dimension above it and a height dimension to its right */
+    .dimensioned {
+      position: relative;
+      padding: 30px 44px 0 0;
+    }
+
+    .dimensioned img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px var(--rule), 0 16px 32px -24px var(--shadow);
+    }
+
+    .dim {
+      position: absolute;
+      color: var(--dim);
+      font: 500 12px/1.4 var(--font-mono);
+    }
+
+    .dim span {
+      position: absolute;
+      padding: 0 8px;
+      background: var(--paper);
+      white-space: nowrap;
+    }
+
+    .dim-width {
+      top: 12px;
+      left: 0;
+      right: 44px;
+      border-top: 1px solid currentColor;
+    }
+
+    .dim-width::before,
+    .dim-width::after {
+      content: "";
+      position: absolute;
+      top: -6px;
+      height: 11px;
+      border-left: 1px solid currentColor;
+    }
+
+    .dim-width::before { left: 0; }
+    .dim-width::after  { right: 0; }
+
+    .dim-width span {
+      left: 50%;
+      top: -9px;
+      transform: translateX(-50%);
+    }
+
+    .dim-height {
+      top: 30px;
+      bottom: 0;
+      right: 18px;
+      border-left: 1px solid currentColor;
+    }
+
+    .dim-height::before,
+    .dim-height::after {
+      content: "";
+      position: absolute;
+      left: -6px;
+      width: 11px;
+      border-top: 1px solid currentColor;
+    }
+
+    .dim-height::before { top: 0; }
+    .dim-height::after  { bottom: 0; }
+
+    .dim-height span {
+      top: 50%;
+      left: 0;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+
+    .hero-figure figcaption {
+      font: 12px var(--font-mono);
+      color: var(--ink-3);
+    }
+
+
+    /* ==========================================================
+       Sections: title in a left column, content on the right
+       ========================================================== */
+
+    .sheet {
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 48px;
+      padding-block: 72px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .sheet-head {
+      position: sticky;
+      top: 76px;
+      align-self: start;
+    }
+
+    .sheet-head h2 {
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .sheet-body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Sub-headings read like labels on a drawing */
+    .sheet-body > h3,
+    .palette > h3 {
+      margin-top: 24px;
+      font: 500 12px var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    @media (max-width: 960px) {
+      .sheet {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        padding-block: 56px;
+      }
+
+      .sheet-head {
+        position: static;
+      }
+    }
+
+
+    /* ==========================================================
+       Tables: hairlines only, numbers in tabular figures
+       ========================================================== */
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th,
+    td {
+      padding: 10px 20px 10px 0;
+      text-align: left;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-right: 0;
+    }
+
+    thead th {
+      font: 500 11px var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      border-bottom-color: var(--ink-3);
+    }
+
+    tbody th {
+      font-weight: 600;
+    }
+
+    tbody td {
+      color: var(--ink-2);
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+
+    /* ==========================================================
+       Principles: the rule on the left, its reason on the right
+       ========================================================== */
+
+    .principles {
+      display: grid;
+      margin: 0;
+    }
+
+    .principles > div {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 6px 32px;
+      padding-block: 16px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .principles > div:last-child {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .principles dt {
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .principles dd {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: 15px;
+    }
+
+    @media (max-width: 720px) {
+      .principles > div {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* A principle made of related parts, e.g. one rule per pair of variants */
+    .principle-group {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .principle-group li {
+      padding-left: 14px;
+      border-left: 2px solid var(--rule);
+    }
+
+    .principle-group strong {
+      display: block;
+      color: var(--ink);
+    }
+
+
+    /* ==========================================================
+       Banner previews (built by the script)
+       ========================================================== */
+
+    #variant-previews {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      margin-top: 12px;
+    }
+
+    .variant {
+      display: grid;
+      gap: 10px;
+    }
+
+    .variant-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 12px;
+    }
+
+    .variant-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .variant-header span {
+      font: 12px var(--font-mono);
+      color: var(--ink-3);
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 720px) {
+      .pair.compact {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+    }
+
+    .pair figure {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+    }
+
+    .pair img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px var(--rule);
+    }
+
+    .pair figcaption {
+      font: 500 11px var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+
+    /* ==========================================================
+       Type specimen: a labelled figure, the lines enlarged 1.5×
+       with dotted leader lines out to their labels
+       ========================================================== */
+
+    .specimen {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .specimen-drawing {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .specimen-drawing .sans      { font-family: var(--banner-sans); }
+    .specimen-drawing .mono      { font-family: var(--banner-mono); }
+    .specimen-drawing .primary   { fill: var(--ink); }
+    .specimen-drawing .secondary { fill: var(--ink-2); }
+    .specimen-drawing .accent    { fill: var(--prompt); }
+
+    .specimen-drawing .leader {
+      fill: none;
+      stroke: var(--ink-3);
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 0.1 4.5;
+    }
+
+    .specimen-drawing .leader-dot {
+      fill: var(--ink-3);
+    }
+
+    .specimen-drawing .label-title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      fill: var(--ink);
+    }
+
+    .specimen-drawing .label-spec {
+      font-family: var(--font-body);
+      font-size: 12px;
+      fill: var(--ink-3);
+    }
+
+    .specimen figcaption {
+      color: var(--ink-3);
+      font-size: 13px;
+    }
+
+
+    /* ==========================================================
+       Spacing model and measurement overlays
+       ========================================================== */
+
+    .model {
+      max-width: 520px;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .model .line {
+      padding: 4px 20px;
+      font-family: var(--banner-sans);
+    }
+
+    .model .line.mono {
+      font-family: var(--banner-mono);
+      font-size: 14px;
+    }
+
+    .model .line.name {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .model .line.secondary {
+      color: var(--ink-2);
+    }
+
+    .model .path {
+      color: var(--prompt);
+    }
+
+    .model .band {
+      padding: 4px 20px;
+      font: 500 11px var(--font-mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .band.margin { background: var(--margin-fill); color: var(--margin-line); }
+    .band.group  { background: var(--group-fill);  color: var(--group-line); }
+    .band.inner  { background: var(--inner-fill);  color: var(--inner-line); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 20px;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 14px;
+      height: 10px;
+      margin-right: 6px;
+      vertical-align: -1px;
+      border-radius: 2px;
+    }
+
+    .legend .margin { background: var(--margin-fill); outline: 1px solid var(--margin-line); }
+    .legend .group  { background: var(--group-fill);  outline: 1px solid var(--group-line); }
+    .legend .inner  { background: var(--inner-fill);  outline: 1px solid var(--inner-line); }
+    .legend .ink    { outline: 1px dashed var(--ink-line); }
+
+    .legend label {
+      margin-left: auto;
+      cursor: pointer;
+    }
+
+    /* One column that can shrink below its content, so each overlay scrolls in its own box */
+    #measurements {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .measure-caption {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .measure-caption span {
+      font: 12px var(--font-mono);
+      color: var(--ink-3);
+    }
+
+    .measure-scroll {
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .measure-frame {
+      position: relative;
+    }
+
+    .measure-frame img,
+    .measure-frame svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .measure-frame img {
+      border-radius: 6px;
+    }
+
+    .measure-frame svg {
+      position: absolute;
+      inset: 0;
+      overflow: visible;
+    }
+
+    .overlays-off .measure-frame svg {
+      display: none;
+    }
+
+    .overlay .margin { fill: var(--margin-fill); }
+    .overlay .group  { fill: var(--group-fill); }
+    .overlay .inner  { fill: var(--inner-fill); }
+
+    .overlay .ink {
+      fill: none;
+      stroke: var(--ink-line);
+      stroke-dasharray: 3 2;
+    }
+
+    .overlay text {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      paint-order: stroke;
+      stroke: var(--label-halo);
+      stroke-linejoin: round;
+      dominant-baseline: central;
+    }
+
+    .overlay text.margin { fill: var(--margin-line); }
+    .overlay text.group  { fill: var(--group-line); }
+    .overlay text.inner  { fill: var(--inner-line); }
+
+
+    /* ==========================================================
+       Colour swatches
+       ========================================================== */
+
+    .palettes {
+      display: grid;
+      gap: 32px;
+    }
+
+    .palette {
+      display: grid;
+      gap: 12px;
+    }
+
+    .palette > h3 {
+      margin-top: 0;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .swatch {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .swatch-sample {
+      display: grid;
+      place-items: center;
+      height: 96px;
+      font: 700 40px var(--banner-sans);
+      letter-spacing: -0.02em;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .swatch-info {
+      display: grid;
+      gap: 2px;
+      padding: 12px 14px 14px;
+    }
+
+    .swatch-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .swatch-use {
+      color: var(--ink-3);
+      font-size: 13px;
+    }
+
+    .swatch-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .swatch button {
+      margin-left: -6px;
+      padding: 2px 6px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--ink);
+      font: 500 13px var(--font-mono);
+      cursor: pointer;
+    }
+
+    .swatch button:hover {
+      background: var(--panel);
+    }
+
+    .ratio {
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--ink-2);
+      font: 500 11px var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Colour chip for each glow in the table */
+    .glow-chip {
+      display: inline-block;
+      width: 28px;
+      height: 14px;
+      margin-right: 10px;
+      border-radius: 3px;
+      vertical-align: -2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <nav aria-label="Sections">
+        <a href="#variants">Variants</a>
+        <a href="#typography">Typography</a>
+        <a href="#spacing">Spacing</a>
+        <a href="#margins">Margins</a>
+        <a href="#alignment">Alignment</a>
+        <a href="#colour">Colour</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+      <div class="theme-switch" role="group" aria-label="Theme">
+        <button type="button" data-theme-choice="auto">Auto</button>
+        <button type="button" data-theme-choice="light">Light</button>
+        <button type="button" data-theme-choice="dark">Dark</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="page">
+
+    <header class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">~/shabab <span class="dollar">$</span> banner-design-guide <span class="flag">--version</span> <span class="value">1.0</span></p>
+        <div class="title-row">
+          <h1>Banner design guide</h1>
+          <span class="version-chip">v1.0</span>
+        </div>
+        <p class="lead">
+          The design system behind the profile banners: variants, typography, spacing, margins,
+          alignment and colour.
+        </p>
+        <p class="note">
+          All dimensions are in CSS pixels. Positions and gaps are measured from the visible outline
+          of the letters (the <strong>ink</strong>), not from the font's line box, as rendered by
+          Chrome on macOS. The same content, without the visuals, is in <code>README.md</code>.
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div><dt>Variants</dt><dd>4</dd></div>
+        <div><dt>Typefaces</dt><dd>2</dd></div>
+        <div><dt>Text colours</dt><dd>3</dd></div>
+        <div><dt>Contrast</dt><dd>WCAG AA</dd></div>
+      </dl>
+
+      <figure class="hero-figure">
+        <div class="dimensioned">
+          <span class="dim dim-width" aria-hidden="true"><span>846</span></span>
+          <span class="dim dim-height" aria-hidden="true"><span>139</span></span>
+          <!-- src is set by the script, in the page's current theme -->
+          <img data-banner="desktop" width="846" height="139" alt="Desktop banner: ~/shabab prompt, Ahmed Shabab Noor, Software & Data Engineer, and the tagline">
+        </div>
+        <figcaption>Desktop variant · 846 × 139 px</figcaption>
+      </figure>
+    </header>
+
+
+    <!-- ======================================================
+         Variants
+         ====================================================== -->
+    <section id="variants" class="sheet">
+      <div class="sheet-head"><h2>Variants</h2></div>
+      <div class="sheet-body">
+        <p>
+          The profile README chooses a variant with a <code>&lt;picture&gt;</code> element and
+          displays it at full width. Each SVG contains both a light and a dark palette and follows
+          the viewer's system setting (<code>prefers-color-scheme</code>).
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Variant</th><th>File</th><th>Size</th><th>Shown when</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Desktop</th><td><code>banner-desktop-v1.0.svg</code></td><td>846 × 139</td><td>screens wider than 1100px; also the fallback image</td></tr>
+              <tr><th>Slim</th><td><code>banner-desktop-slim-v1.0.svg</code></td><td>846 × 102</td><td>not currently used; a compact alternative to desktop</td></tr>
+              <tr><th>Tablet</th><td><code>banner-tablet-v1.0.svg</code></td><td>600 × 168</td><td>screens 601–1100px wide</td></tr>
+              <tr><th>Mobile</th><td><code>banner-mobile-v1.0.svg</code></td><td>397 × 165</td><td>screens up to 600px wide</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Filled in by the script: one light and one dark preview per variant -->
+        <div id="variant-previews"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Typography
+         ====================================================== -->
+    <section id="typography" class="sheet">
+      <div class="sheet-head"><h2>Typography</h2></div>
+      <div class="sheet-body">
+        <p>
+          Two typefaces: the system sans-serif for the name and role, and a monospace for the
+          terminal-style prompt and the tagline. No fonts are embedded. The banners use the viewer's
+          system fonts, so rendering varies slightly between operating systems.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Use</th><th>Font stack</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Name, role</th><td><code>-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif</code></td></tr>
+              <tr><th>Prompt, tagline</th><td><code>'Fira Code', 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Type specimen</h3>
+        <figure class="specimen">
+          <svg id="specimen" class="specimen-drawing" viewBox="0 0 820 300" width="820" height="300"
+               role="img" aria-labelledby="specimen-caption">
+            <!-- The four lines at desktop sizes, enlarged 1.5×, on the desktop baselines -->
+            <text id="sample-prompt" class="mono" x="0" y="91" font-size="19.5" letter-spacing="1.5"><tspan class="accent">~/shabab</tspan> <tspan class="secondary">$</tspan> <tspan class="accent">_</tspan></text>
+            <text id="sample-name" class="sans primary" x="0" y="145" font-size="42" font-weight="700" letter-spacing="-0.45">Ahmed Shabab Noor</text>
+            <text id="sample-role" class="sans secondary" x="0" y="178" font-size="24" font-weight="500" letter-spacing="0.3">Software &amp; Data Engineer</text>
+            <text id="sample-tagline" class="mono secondary" x="0" y="218" font-size="19.5">Backend systems · Data pipelines · AI/ML</text>
+
+            <!-- Leader lines and labels, drawn by drawSpecimenLabels() once the text is measured -->
+            <g id="specimen-labels"></g>
+          </svg>
+          <figcaption id="specimen-caption">
+            <strong>Figure 1.</strong> The four lines at desktop sizes, enlarged 1.5×. Each label gives
+            the actual size, typeface, weight and tracking.
+          </figcaption>
+        </figure>
+
+        <h3>Type scale</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Prompt</th><th>Name</th><th>Role</th><th>Tagline</th><th>Name ÷ role</th><th>Role ÷ tagline</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Desktop, slim</th><td>13</td><td>28</td><td>16</td><td>13</td><td>1.75×</td><td>1.23×</td></tr>
+              <tr><th>Tablet</th><td>15</td><td>34</td><td>18</td><td>15</td><td>1.89×</td><td>1.20×</td></tr>
+              <tr><th>Mobile</th><td>14</td><td>32</td><td>18</td><td>14</td><td>1.78×</td><td>1.29×</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Line</th><th>Weight</th><th>Tracking (letter-spacing)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Prompt</th><td>400, with a 0.35px stroke in light mode</td><td>1</td></tr>
+              <tr><th>Name</th><td>700</td><td>−0.3 at 28px; −1 at 32 and 34px</td></tr>
+              <tr><th>Role</th><td>500</td><td>0.2</td></tr>
+              <tr><th>Tagline</th><td>400</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Principles</h3>
+        <dl class="principles">
+          <div>
+            <dt>A matched monospace pair</dt>
+            <dd>The prompt and the tagline are always the same size.</dd>
+          </div>
+          <div>
+            <dt>Name to role: 1.75–1.9×</dt>
+            <dd>A clear lead for the name without dominating the frame.</dd>
+          </div>
+          <div>
+            <dt>Role to tagline: 1.2–1.3×</dt>
+            <dd>The tagline is supporting detail, so it's set a step smaller than the role to draw less attention.</dd>
+          </div>
+          <div>
+            <dt>Tighter tracking on the name</dt>
+            <dd>Large bold type looks loose at default spacing, so the name is tightened slightly: −0.3 at 28px, −1 at 32–34px.</dd>
+          </div>
+          <div>
+            <dt>Stroke compensation in light mode</dt>
+            <dd>Dark text on a light background looks thinner than light text on a dark one (the irradiation effect). So in light mode, the prompt gets a 0.35px stroke in its own colour, and the <code>$</code> one in its grey. A heavier font weight wouldn't help, because Menlo, the macOS fallback when Fira Code and SF Mono aren't installed, has only regular and bold.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Vertical spacing
+         ====================================================== -->
+    <section id="spacing" class="sheet">
+      <div class="sheet-head"><h2>Vertical spacing</h2></div>
+      <div class="sheet-body">
+        <p>
+          The four lines form three groups by proximity: the prompt, the name and role, and the
+          tagline. The name and role are separated by a small <strong>inner gap</strong>. The prompt
+          and the tagline each sit one larger <strong>group gap</strong> away, equal above and below.
+          The difference between the two gaps is what makes the grouping read.
+        </p>
+
+        <div class="model" aria-hidden="true">
+          <div class="band margin">Top margin</div>
+          <div class="line mono"><span class="path">~/shabab</span> $ _</div>
+          <div class="band group">Group gap</div>
+          <div class="line name">Ahmed Shabab Noor</div>
+          <div class="band inner">Inner gap</div>
+          <div class="line secondary">Software &amp; Data Engineer</div>
+          <div class="band group">Group gap, equal to the one above</div>
+          <div class="line mono secondary">Backend systems · Data pipelines · AI/ML</div>
+          <div class="band margin">Bottom margin, equal to the top</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Gap</th><th>Desktop</th><th>Slim</th><th>Tablet</th><th>Mobile</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Prompt → name (group)</th><td>13.3</td><td>14.3</td><td>21.0</td><td>21.8</td></tr>
+              <tr><th>Name → role (inner)</th><td>9.0</td><td>9.0</td><td>12.3</td><td>12.0</td></tr>
+              <tr><th>Role → tagline (group)</th><td>13.5</td><td>same line</td><td>21.0</td><td>21.8</td></tr>
+              <tr><th>Group ÷ inner</th><td>1.49×</td><td>1.58×</td><td>1.71×</td><td>1.81×</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="note">
+          Gaps are measured from the bottom of one line's ink to the top of the next, and rounded to
+          0.1px. The group gap is 1.5–1.8 times the inner gap.
+        </p>
+
+        <h3>Measured on each banner</h3>
+        <div class="legend">
+          <span><i class="margin"></i>Margin</span>
+          <span><i class="group"></i>Group gap</span>
+          <span><i class="inner"></i>Inner gap</span>
+          <span><i class="ink"></i>Ink of each line</span>
+          <label><input type="checkbox" id="toggle-overlays" checked> Show measurements</label>
+        </div>
+
+        <!-- Filled in by the script: each banner with its measurements drawn on top -->
+        <div id="measurements"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Margins
+         ====================================================== -->
+    <section id="margins" class="sheet">
+      <div class="sheet-head"><h2>Margins</h2></div>
+      <div class="sheet-body">
+        <p>The text is treated as a single block placed in the frame. The space around it forms the margins.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Desktop</th><th>Slim</th><th>Tablet</th><th>Mobile</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Frame</th><td>846 × 139</td><td>846 × 102</td><td>600 × 168</td><td>397 × 165</td></tr>
+              <tr><th>Text block height</th><td>97.3</td><td>71.8</td><td>126.0</td><td>124.0</td></tr>
+              <tr><th>Top / bottom</th><td>21.0 / 20.8</td><td>15.3 / 15.0</td><td>21.0 / 21.0</td><td>20.5 / 20.5</td></tr>
+              <tr><th>Top as share of height</th><td><strong>15%</strong></td><td><strong>15%</strong></td><td><strong>12.5%</strong></td><td><strong>12.5%</strong></td></tr>
+              <tr><th>Left</th><td>41.8</td><td>30.3</td><td>31.5</td><td>30.8</td></tr>
+              <tr><th>Left ÷ top</th><td><strong>2×</strong></td><td><strong>2×</strong></td><td><strong>1.5×</strong></td><td><strong>1.5×</strong></td></tr>
+              <tr><th>Right</th><td>open</td><td>30.3</td><td>open</td><td>30.8</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Principles</h3>
+        <dl class="principles">
+          <div>
+            <dt>Hierarchy first, then equal space above and below</dt>
+            <dd>The type sizes and gaps were set first, to get the hierarchy right. The frame was then sized to give the text equal space above and below, each a fixed share of the height: 15% on desktop and slim, 12.5% on tablet and mobile. On desktop the text fills the remaining 70% of the height: 97.3 ÷ 0.70 ≈ 139px.</dd>
+          </div>
+          <div>
+            <dt>Margin proportions</dt>
+            <dd>
+              <ul class="principle-group">
+                <li><strong>Desktop and slim: top margin 15% of the height, left margin 2 × top.</strong> They're shown at actual size on wide screens, so they get more room above, below and to the left.</li>
+                <li><strong>Tablet and mobile: top margin 12.5% of the height, left margin 1.5 × top.</strong> The tablet banner is displayed scaled up (about 1–1.6×), so its margins are already generous on screen. On mobile, a wider left margin would push the tagline into the right edge.</li>
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>Horizontal placement</dt>
+            <dd>
+              <ul class="principle-group">
+                <li><strong>Desktop and tablet: left-aligned, right side open.</strong> Keeping the text together on the left reads more easily than spreading it across the frame. The open space also holds the background glow.</li>
+                <li><strong>Slim and mobile: centred.</strong> The side margins are equal, so the text as a whole is centred horizontally. On slim, the flush-right tagline ends one left margin from the right edge. The mobile frame is exactly the text block plus the left margin on each side (397px).</li>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Optical alignment
+         ====================================================== -->
+    <section id="alignment" class="sheet">
+      <div class="sheet-head"><h2>Optical alignment</h2></div>
+      <div class="sheet-body">
+        <p>
+          Every line starts on the same visible left edge. Each glyph carries a left side bearing, the built-in space before its outline, which varies by letter, weight and size. The bold “A” of the name has the most. So each line's <code>x</code> is adjusted by a fraction of a pixel until the visible letters line up.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Prompt x → ink</th><th>Name</th><th>Role</th><th>Tagline</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Desktop</th><td>41.87 → 41.75</td><td>41.62 → 41.75</td><td>41.12 → 41.75</td><td>41.12 → 42.00</td></tr>
+              <tr><th>Slim</th><td>30.38 → 30.25</td><td>30.13 → 30.25</td><td>29.63 → 30.25</td><td>flush right, ends at 815.75</td></tr>
+              <tr><th>Tablet</th><td>31.50 → 31.50</td><td>31.25 → 31.50</td><td>30.75 → 31.50</td><td>30.50 → 31.50</td></tr>
+              <tr><th>Mobile</th><td>30.75 → 30.75</td><td>30.50 → 30.75</td><td>30.00 → 30.75</td><td>29.75 → 30.75</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="note">Each cell shows the line's <code>x</code> position → where its ink starts. Ink was measured on a 0.25px grid; differences under half a pixel aren't visible.</p>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Colour
+         ====================================================== -->
+    <section id="colour" class="sheet">
+      <div class="sheet-head"><h2>Colour</h2></div>
+      <div class="sheet-body">
+        <p>
+          Two palettes, switched by <code>prefers-color-scheme</code> inside each SVG. Contrast
+          ratios are WCAG 2 ratios against the plain background. Click a hex value to copy it.
+        </p>
+
+        <div class="palettes">
+          <div class="palette">
+            <h3>Light</h3>
+            <ul class="swatches">
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #F6F8FB;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Background</span>
+                  <span class="swatch-use"><code>.bg</code> · frame</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#F6F8FB">#F6F8FB</button></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #F6F8FB; color: #0B1220;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Primary</span>
+                  <span class="swatch-use"><code>.name .tagw</code> · name, slim tagline</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#0B1220">#0B1220</button><span class="ratio">AAA · 17.6:1</span></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #F6F8FB; color: #4B5568;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Secondary</span>
+                  <span class="swatch-use"><code>.role .tag .tagr</code> · role, tagline, $</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#4B5568">#4B5568</button><span class="ratio">AAA · 7.1:1</span></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #F6F8FB; color: #15803D;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Accent</span>
+                  <span class="swatch-use"><code>.path</code> · prompt path, cursor</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#15803D">#15803D</button><span class="ratio">AA · 4.7:1</span></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="palette">
+            <h3>Dark</h3>
+            <ul class="swatches">
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #121212;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Background</span>
+                  <span class="swatch-use"><code>.bg</code> · frame</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#121212">#121212</button></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #121212; color: #E0E0E0;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Primary</span>
+                  <span class="swatch-use"><code>.name .tagw</code> · name, slim tagline</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#E0E0E0">#E0E0E0</button><span class="ratio">AAA · 14.2:1</span></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #121212; color: #B8B8B8;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Secondary</span>
+                  <span class="swatch-use"><code>.role .tag .tagr</code> · role, tagline, $</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#B8B8B8">#B8B8B8</button><span class="ratio">AAA · 9.4:1</span></div>
+                </div>
+              </li>
+              <li class="swatch">
+                <div class="swatch-sample" style="background: #121212; color: #4ADE80;">Aa</div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Accent</span>
+                  <span class="swatch-use"><code>.path</code> · prompt path, cursor</span>
+                  <div class="swatch-meta"><button type="button" data-copy="#4ADE80">#4ADE80</button><span class="ratio">AAA · 10.8:1</span></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Principles</h3>
+        <dl class="principles">
+          <div>
+            <dt>Three text colours</dt>
+            <dd>Primary, secondary and accent, with nothing in between.</dd>
+          </div>
+          <div>
+            <dt>Colour sets the hierarchy; size and typeface refine it</dt>
+            <dd>The primary colour marks the name, and the secondary colour marks the lines that support it. Within the secondary lines, size and typeface add a further step: the role is larger and set in the sans-serif, so it leads the smaller, monospace tagline.</dd>
+          </div>
+          <div>
+            <dt>Contrast is checked over the glow, not only on the plain background</dt>
+            <dd>All text meets WCAG 2 AA (4.5:1) in both themes, including where it crosses the glow. On tablet and mobile the tagline runs into the glow, and the quietest grey that keeps 4.5:1 there is almost identical to the secondary colour, so the tagline uses it. The worst case, at the brightest point of the glow on mobile, is 4.9:1 in light and 4.6:1 in dark.</dd>
+          </div>
+          <div>
+            <dt>Slim's tagline uses the primary colour</dt>
+            <dd>It sits fully on the glow, where the secondary colour drops to 4.2:1. The primary colour keeps 10.5:1 in light and 6.5:1 in dark at the brightest point.</dd>
+          </div>
+        </dl>
+
+        <h3>Background glow</h3>
+        <p>Three ellipses on the right of the frame, blurred into one soft field of colour.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Glow</th><th>Colour</th><th>Position</th><th>Opacity, light</th><th>Opacity, dark</th></tr>
+            </thead>
+            <tbody>
+              <tr><th><span class="glow-chip" style="background: #00D4AA;"></span>Teal</th><td><code>#00D4AA</code></td><td>top</td><td>55%</td><td>45%</td></tr>
+              <tr><th><span class="glow-chip" style="background: #6366F1;"></span>Indigo</th><td><code>#6366F1</code></td><td>bottom right</td><td>40%</td><td>50%</td></tr>
+              <tr><th><span class="glow-chip" style="background: #38BDF8;"></span>Sky</th><td><code>#38BDF8</code></td><td>bottom centre</td><td>45%</td><td>35%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <dl class="principles">
+          <div>
+            <dt>Blur</dt>
+            <dd>A Gaussian blur that scales with the frame's height, so every variant has the same softness.</dd>
+          </div>
+          <div>
+            <dt>Tagline halo (tablet and mobile)</dt>
+            <dd>A faint, blurred copy of the tagline in the background colour sits behind it to separate it from the glow.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         Motion and accessibility
+         ====================================================== -->
+    <section id="accessibility" class="sheet">
+      <div class="sheet-head"><h2>Motion and accessibility</h2></div>
+      <div class="sheet-body">
+        <dl class="principles">
+          <div>
+            <dt>Blinking cursor</dt>
+            <dd>The cursor blinks every 1.1s, and stops when the viewer has reduced motion turned on (<code>prefers-reduced-motion</code>).</dd>
+          </div>
+          <div>
+            <dt>Screen readers</dt>
+            <dd>Each SVG has a <code>&lt;title&gt;</code> with the full text, and the README image has alt text.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================================
+       Embedded banner files
+       Exact copies of the four SVGs in this folder, so this page
+       works on its own. When a banner changes, replace its copy.
+       ========================================================== -->
+
+  <script type="image/svg+xml" id="svg-desktop">
+<svg xmlns="http://www.w3.org/2000/svg" width="846" height="139" viewBox="0 0 846 139" role="img" aria-labelledby="t">
+  <title id="t">Ahmed Shabab Noor — Software &amp; Data Engineer. Backend systems, data pipelines, AI and machine learning.</title>
+  <style>
+    .bg    { fill: #F6F8FB; }
+    .name  { fill: #0B1220; }
+    .role  { fill: #4B5568; }
+    .tag   { fill: #4B5568; }
+    .path  { fill: #15803D; stroke: #15803D; stroke-width: 0.35; stroke-linejoin: round; }
+    .path .tag { stroke: #4B5568; }
+    .cursor { animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; stroke-opacity: 1; } 56%, 100% { fill-opacity: 0; stroke-opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .blob1 { fill: #00D4AA; fill-opacity: .55; }
+    .blob2 { fill: #6366F1; fill-opacity: .40; }
+    .blob3 { fill: #38BDF8; fill-opacity: .45; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #121212; }
+      .name  { fill: #E0E0E0; }
+      .role  { fill: #B8B8B8; }
+      .tag   { fill: #B8B8B8; }
+      .path  { fill: #4ADE80; stroke: none; }
+      .path .tag { stroke: none; }
+      .bar   { fill: #00D4AA; }
+      .blob1 { fill-opacity: .45; }
+      .blob2 { fill-opacity: .50; }
+      .blob3 { fill-opacity: .35; }
+    }
+  </style>
+  <defs>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="30.3"/>
+    </filter>
+    <clipPath id="card"><rect width="846" height="139"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect class="bg" width="846" height="139"/>
+    <g filter="url(#blur)">
+      <ellipse class="blob1" cx="656"  cy="28"  rx="134" ry="61"/>
+      <ellipse class="blob2" cx="768"  cy="105"  rx="120" ry="56"/>
+      <ellipse class="blob3" cx="557"  cy="114" rx="99" ry="41"/>
+    </g>
+  </g>
+
+    <text class="path" x="41.87" y="30.88" font-size="13" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
+    <text class="name" x="41.62" y="67" font-size="28" font-weight="700" letter-spacing="-0.3">Ahmed Shabab Noor</text>
+    <text class="role" x="41.12" y="88.75" font-size="16" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+  </g>
+  <text class="tag" x="41.12" y="115.38" font-size="13" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+</svg>
+  </script>
+
+  <script type="image/svg+xml" id="svg-slim">
+<svg xmlns="http://www.w3.org/2000/svg" width="846" height="102" viewBox="0 0 846 102" role="img" aria-labelledby="t">
+  <title id="t">Ahmed Shabab Noor — Software &amp; Data Engineer. Backend systems, data pipelines, AI and machine learning.</title>
+  <style>
+    .bg    { fill: #F6F8FB; }
+    .name  { fill: #0B1220; }
+    .role  { fill: #4B5568; }
+    .tag   { fill: #4B5568; }
+    .tagw  { fill: #0B1220; }
+    .path  { fill: #15803D; stroke: #15803D; stroke-width: 0.35; stroke-linejoin: round; }
+    .path .tag { stroke: #4B5568; }
+    .cursor { animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; stroke-opacity: 1; } 56%, 100% { fill-opacity: 0; stroke-opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .blob1 { fill: #00D4AA; fill-opacity: .55; }
+    .blob2 { fill: #6366F1; fill-opacity: .40; }
+    .blob3 { fill: #38BDF8; fill-opacity: .45; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #121212; }
+      .name  { fill: #E0E0E0; }
+      .role  { fill: #B8B8B8; }
+      .tag   { fill: #B8B8B8; }
+      .tagw  { fill: #E0E0E0; }
+      .path  { fill: #4ADE80; stroke: none; }
+      .path .tag { stroke: none; }
+      .bar   { fill: #00D4AA; }
+      .blob1 { fill-opacity: .45; }
+      .blob2 { fill-opacity: .50; }
+      .blob3 { fill-opacity: .35; }
+    }
+  </style>
+  <defs>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="23.5"/>
+    </filter>
+    <clipPath id="card"><rect width="846" height="102"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect class="bg" width="846" height="102"/>
+    <g filter="url(#blur)">
+      <ellipse class="blob1" cx="656"  cy="19"  rx="134" ry="46"/>
+      <ellipse class="blob2" cx="768"  cy="78"  rx="120" ry="41"/>
+      <ellipse class="blob3" cx="557"  cy="85"  rx="99" ry="31"/>
+    </g>
+  </g>
+
+    <text class="path" x="30.38" y="25.18" font-size="13" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
+    <text class="name" x="30.13" y="62.19" font-size="28" font-weight="700" letter-spacing="-0.3">Ahmed Shabab Noor</text>
+    <text class="role" x="29.63" y="83.94" font-size="16" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+  </g>
+  <text class="tagw" x="816.37" y="83.94" text-anchor="end" font-size="13" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+</svg>
+  </script>
+
+  <script type="image/svg+xml" id="svg-tablet">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="168" viewBox="0 0 600 168" role="img" aria-labelledby="t">
+  <title id="t">Ahmed Shabab Noor — Software &amp; Data Engineer. Backend systems, data pipelines, AI and machine learning.</title>
+  <style>
+    .bg    { fill: #F6F8FB; }
+    .name  { fill: #0B1220; }
+    .role  { fill: #4B5568; }
+    .tag   { fill: #4B5568; }
+    .path  { fill: #15803D; stroke: #15803D; stroke-width: 0.35; stroke-linejoin: round; }
+    .path .tag { stroke: #4B5568; }
+    .tagr  { fill: #4B5568; }
+    .halo  { fill: #F6F8FB; stroke: #F6F8FB; stroke-width: 3; stroke-linejoin: round; opacity: .5; }
+    .cursor { animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; stroke-opacity: 1; } 56%, 100% { fill-opacity: 0; stroke-opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .blob1 { fill: #00D4AA; fill-opacity: .55; }
+    .blob2 { fill: #6366F1; fill-opacity: .40; }
+    .blob3 { fill: #38BDF8; fill-opacity: .45; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #121212; }
+      .name  { fill: #E0E0E0; }
+      .role  { fill: #B8B8B8; }
+      .tag   { fill: #B8B8B8; }
+      .path  { fill: #4ADE80; stroke: none; }
+      .path .tag { stroke: none; }
+      .tagr  { fill: #B8B8B8; }
+      .halo  { fill: #121212; stroke: #121212; opacity: .28; }
+      .bar   { fill: #00D4AA; }
+      .blob1 { fill-opacity: .45; }
+      .blob2 { fill-opacity: .50; }
+      .blob3 { fill-opacity: .35; }
+    }
+  </style>
+  <defs>
+    <filter id="soft" x="-10%" y="-60%" width="120%" height="220%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="24.0"/>
+    </filter>
+    <clipPath id="card"><rect width="600" height="168"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect class="bg" width="600" height="168"/>
+    <g filter="url(#blur)">
+      <ellipse class="blob1" cx="462" cy="32"  rx="110" ry="62"/>
+      <ellipse class="blob2" cx="545" cy="132" rx="95" ry="52"/>
+      <ellipse class="blob3" cx="392" cy="150" rx="78" ry="40"/>
+    </g>
+  </g>
+
+  <text class="path" x="31.5" y="32.81" font-size="15" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
+    <text class="name" x="31.25" y="81.12" font-size="34" font-weight="700" letter-spacing="-1">Ahmed Shabab Noor</text>
+    <text class="role" x="30.75" y="107.38" font-size="18" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+  </g>
+  <text class="halo" filter="url(#soft)" x="30.5" y="143.69" font-size="15" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+  <text class="tagr" x="30.5" y="143.69" font-size="15" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+</svg>
+  </script>
+
+  <script type="image/svg+xml" id="svg-mobile">
+<svg xmlns="http://www.w3.org/2000/svg" width="397" height="165" viewBox="0 0 397 165" role="img" aria-labelledby="t">
+  <title id="t">Ahmed Shabab Noor — Software &amp; Data Engineer. Backend systems, data pipelines, AI and machine learning.</title>
+  <style>
+    .bg    { fill: #F6F8FB; }
+    .name  { fill: #0B1220; }
+    .role  { fill: #4B5568; }
+    .tag   { fill: #4B5568; }
+    .path  { fill: #15803D; stroke: #15803D; stroke-width: 0.35; stroke-linejoin: round; }
+    .path .tag { stroke: #4B5568; }
+    .tagr  { fill: #4B5568; }
+    .halo  { fill: #F6F8FB; stroke: #F6F8FB; stroke-width: 2.5; stroke-linejoin: round; opacity: .5; }
+    .cursor { animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 0%, 55% { fill-opacity: 1; stroke-opacity: 1; } 56%, 100% { fill-opacity: 0; stroke-opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+    .blob1 { fill: #00D4AA; fill-opacity: .55; }
+    .blob2 { fill: #6366F1; fill-opacity: .40; }
+    .blob3 { fill: #38BDF8; fill-opacity: .45; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #121212; }
+      .name  { fill: #E0E0E0; }
+      .role  { fill: #B8B8B8; }
+      .tag   { fill: #B8B8B8; }
+      .path  { fill: #4ADE80; stroke: none; }
+      .path .tag { stroke: none; }
+      .tagr  { fill: #B8B8B8; }
+      .halo  { fill: #121212; stroke: #121212; opacity: .28; }
+      .bar   { fill: #00D4AA; }
+      .blob1 { fill-opacity: .45; }
+      .blob2 { fill-opacity: .50; }
+      .blob3 { fill-opacity: .35; }
+    }
+  </style>
+  <defs>
+    <filter id="soft" x="-10%" y="-60%" width="120%" height="220%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="21.6"/>
+    </filter>
+    <clipPath id="card"><rect width="397" height="165"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect class="bg" width="397" height="165"/>
+    <g filter="url(#blur)">
+      <ellipse class="blob1" cx="327" cy="28"  rx="95" ry="57"/>
+      <ellipse class="blob2" cx="369" cy="130" rx="82" ry="49"/>
+      <ellipse class="blob3" cx="257" cy="149" rx="70" ry="37"/>
+    </g>
+  </g>
+
+  <text class="path" x="30.75" y="31.38" font-size="14" letter-spacing="1" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">~/shabab <tspan class="tag">$</tspan> <tspan class="cursor">_</tspan></text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Helvetica Neue',Arial,sans-serif">
+    <text class="name" x="30.5" y="79" font-size="32" font-weight="700" letter-spacing="-1">Ahmed Shabab Noor</text>
+    <text class="role" x="30" y="105.25" font-size="18" font-weight="500" letter-spacing="0.2">Software &amp; Data Engineer</text>
+  </g>
+  <text class="halo" filter="url(#soft)" x="29.75" y="141.62" font-size="14" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+  <text class="tagr" x="29.75" y="141.62" font-size="14" font-family="'Fira Code','SF Mono',Menlo,Consolas,'Liberation Mono',monospace">Backend systems · Data pipelines · AI/ML</text>
+</svg>
+  </script>
+
+
+  <script>
+    /* ==========================================================
+       Banner data
+       Ink boxes (left, right, top, bottom) of each line, measured
+       in Chrome on a 0.25px grid. These drive the overlays.
+       ========================================================== */
+
+    const BANNERS = [
+      {
+        id: "desktop",
+        name: "Desktop",
+        file: "banner-desktop-v1.0.svg",
+        width: 846,
+        height: 139,
+        usedAt: "screens wider than 1100px",
+        displayScale: 1,
+        rightMarginFixed: false,
+        lines: [
+          { label: "Prompt",  left: 41.75, right: 146.75, top: 21.00,  bottom: 33.50 },
+          { label: "Name",    left: 41.75, right: 306.25, top: 46.75,  bottom: 67.50 },
+          { label: "Role",    left: 41.75, right: 235.75, top: 76.50,  bottom: 91.75 },
+          { label: "Tagline", left: 42.00, right: 353.50, top: 105.25, bottom: 118.25 },
+        ],
+        // [upper line, lower line, kind of gap]
+        gaps: [[0, 1, "group"], [1, 2, "inner"], [2, 3, "group"]],
+      },
+      {
+        id: "slim",
+        name: "Slim",
+        file: "banner-desktop-slim-v1.0.svg",
+        width: 846,
+        height: 102,
+        usedAt: "not currently used",
+        displayScale: 1,
+        rightMarginFixed: true,
+        lines: [
+          { label: "Prompt",  left: 30.25,  right: 135.25, top: 15.25, bottom: 27.75 },
+          { label: "Name",    left: 30.25,  right: 294.75, top: 42.00, bottom: 62.75 },
+          { label: "Role",    left: 30.25,  right: 224.25, top: 71.75, bottom: 87.00 },
+          { label: "Tagline", left: 504.25, right: 815.75, top: 73.75, bottom: 86.75 },
+        ],
+        gaps: [[0, 1, "group"], [1, 2, "inner"]],
+      },
+      {
+        id: "tablet",
+        name: "Tablet",
+        file: "banner-tablet-v1.0.svg",
+        width: 600,
+        height: 168,
+        usedAt: "screens 601–1100px wide",
+        displayScale: 1.25,
+        rightMarginFixed: false,
+        lines: [
+          { label: "Prompt",  left: 31.50, right: 150.75, top: 21.00,  bottom: 35.50 },
+          { label: "Name",    left: 31.50, right: 341.00, top: 56.50,  bottom: 81.50 },
+          { label: "Role",    left: 31.50, right: 246.00, top: 93.75,  bottom: 111.00 },
+          { label: "Tagline", left: 31.50, right: 391.00, top: 132.00, bottom: 147.00 },
+        ],
+        gaps: [[0, 1, "group"], [1, 2, "inner"], [2, 3, "group"]],
+      },
+      {
+        id: "mobile",
+        name: "Mobile",
+        file: "banner-mobile-v1.0.svg",
+        width: 397,
+        height: 165,
+        usedAt: "screens up to 600px wide",
+        displayScale: 1.5,
+        rightMarginFixed: true,
+        lines: [
+          { label: "Prompt",  left: 30.75, right: 142.75, top: 20.50,  bottom: 34.00 },
+          { label: "Name",    left: 30.75, right: 321.75, top: 55.75,  bottom: 79.50 },
+          { label: "Role",    left: 30.75, right: 245.25, top: 91.50,  bottom: 108.75 },
+          { label: "Tagline", left: 30.75, right: 366.25, top: 130.50, bottom: 144.50 },
+        ],
+        gaps: [[0, 1, "group"], [1, 2, "inner"], [2, 3, "group"]],
+      },
+    ];
+
+
+    /* ==========================================================
+       Rendering a banner in a fixed theme
+       Each SVG picks light or dark from the viewer's system
+       setting. To show both side by side, the dark rules are
+       either removed (light) or applied unconditionally (dark).
+       ========================================================== */
+
+    const DARK_RULES = /@media \(prefers-color-scheme: dark\)\s*\{[\s\S]*?\}\s*\}/;
+
+    function bannerSource(id) {
+      return document.getElementById("svg-" + id).textContent.trim();
+    }
+
+    // options.stillCursor: show the cursor without blinking (used for the measured banners)
+    function bannerImageUrl(id, theme, options = {}) {
+      let svg = bannerSource(id);
+
+      if (options.stillCursor) {
+        svg = svg.replace(/\.cursor\s*\{\s*animation:[^;}]*;\s*\}/g, ".cursor { }");
+      }
+
+      if (theme === "dark") {
+        svg = svg.replace("@media (prefers-color-scheme: dark)", "@media all");
+      } else {
+        svg = svg.replace(DARK_RULES, "");
+      }
+
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+
+
+    /* ==========================================================
+       Small helpers
+       ========================================================== */
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    function svgElement(tag, attributes) {
+      const element = document.createElementNS(SVG_NS, tag);
+      for (const [name, value] of Object.entries(attributes)) {
+        element.setAttribute(name, value);
+      }
+      return element;
+    }
+
+    function htmlElement(tag, attributes = {}, children = []) {
+      const element = document.createElement(tag);
+      for (const [name, value] of Object.entries(attributes)) {
+        if (name === "text") {
+          element.textContent = value;
+        } else {
+          element.setAttribute(name, value);
+        }
+      }
+      element.append(...children);
+      return element;
+    }
+
+    // One decimal, halves rounded up (21.75 → "21.8")
+    function format(value) {
+      return value.toFixed(1);
+    }
+
+
+    /* ==========================================================
+       Variants: a light and a dark preview of each banner
+       ========================================================== */
+
+    function renderVariantPreviews() {
+      const container = document.getElementById("variant-previews");
+
+      for (const banner of BANNERS) {
+        const pair = htmlElement("div", { class: banner.width < 700 ? "pair compact" : "pair" });
+
+        for (const theme of ["light", "dark"]) {
+          const image = htmlElement("img", {
+            src: bannerImageUrl(banner.id, theme),
+            width: banner.width,
+            height: banner.height,
+            alt: `${banner.name} banner, ${theme} theme`,
+          });
+          const caption = htmlElement("figcaption", { text: theme === "light" ? "Light" : "Dark" });
+          pair.append(htmlElement("figure", {}, [image, caption]));
+        }
+
+        const header = htmlElement("div", { class: "variant-header" }, [
+          htmlElement("h3", { text: banner.name }),
+          htmlElement("span", { text: `${banner.width} × ${banner.height} · ${banner.usedAt}` }),
+        ]);
+
+        container.append(htmlElement("div", { class: "variant" }, [header, pair]));
+      }
+    }
+
+
+    /* ==========================================================
+       Spacing: each banner with margins, gaps and ink boxes
+       drawn on top, in the page's current theme
+       ========================================================== */
+
+    function drawOverlay(svg, banner) {
+      const { width, height, lines, displayScale } = banner;
+
+      const blockTop = Math.min(...lines.map((line) => line.top));
+      const blockBottom = Math.max(...lines.map((line) => line.bottom));
+      const blockLeft = Math.min(...lines.map((line) => line.left));
+      const blockRight = Math.max(...lines.map((line) => line.right));
+
+      // Labels stay about 10px on screen whatever the display scale
+      const fontSize = 10 / displayScale;
+      const haloWidth = 3 / displayScale;
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.replaceChildren();
+
+      function band(kind, x, y, w, h) {
+        svg.append(svgElement("rect", { class: kind, x, y, width: w, height: h }));
+      }
+
+      function label(kind, x, y, text, anchor = "start") {
+        const element = svgElement("text", {
+          class: kind,
+          x,
+          y,
+          "font-size": fontSize,
+          "stroke-width": haloWidth,
+          "text-anchor": anchor,
+        });
+        element.textContent = text;
+        svg.append(element);
+      }
+
+      // Margins
+      const bottomMargin = height - blockBottom;
+      band("margin", 0, 0, width, blockTop);
+      band("margin", 0, blockBottom, width, bottomMargin);
+      band("margin", 0, blockTop, blockLeft, blockBottom - blockTop);
+      label("margin", blockLeft + 4, blockTop / 2, `top ${format(blockTop)}`);
+      label("margin", blockLeft + 4, blockBottom + bottomMargin / 2, `bottom ${format(bottomMargin)}`);
+      label("margin", blockLeft / 2, (blockTop + blockBottom) / 2, format(blockLeft), "middle");
+
+      if (banner.rightMarginFixed) {
+        const rightMargin = width - blockRight;
+        band("margin", blockRight, blockTop, rightMargin, blockBottom - blockTop);
+        label("margin", blockRight + rightMargin / 2, (blockTop + blockBottom) / 2, format(rightMargin), "middle");
+      }
+
+      // Gaps between lines
+      for (const [upperIndex, lowerIndex, kind] of banner.gaps) {
+        const upper = lines[upperIndex];
+        const lower = lines[lowerIndex];
+        const gapRight = Math.max(upper.right, lower.right);
+        const gap = lower.top - upper.bottom;
+
+        band(kind, blockLeft, upper.bottom, gapRight - blockLeft, gap);
+
+        // Label to the right of the band, or inside it when the frame has no room
+        const labelText = `${format(gap)} ${kind}`;
+        const labelWidth = labelText.length * fontSize * 0.62;
+        if (gapRight + 6 + labelWidth < width - 4) {
+          label(kind, gapRight + 6, upper.bottom + gap / 2, labelText);
+        } else {
+          label(kind, gapRight - 4, upper.bottom + gap / 2, labelText, "end");
+        }
+      }
+
+      // Ink box of each line
+      for (const line of lines) {
+        svg.append(svgElement("rect", {
+          class: "ink",
+          x: line.left,
+          y: line.top,
+          width: line.right - line.left,
+          height: line.bottom - line.top,
+          "stroke-width": 1 / displayScale,
+        }));
+      }
+    }
+
+    function renderMeasurements() {
+      const container = document.getElementById("measurements");
+
+      for (const banner of BANNERS) {
+        const displayWidth = banner.width * banner.displayScale;
+        const displayHeight = banner.height * banner.displayScale;
+
+        const image = htmlElement("img", {
+          "data-banner": banner.id,
+          "data-still-cursor": "true",
+          alt: `${banner.name} banner with its margins and gaps marked`,
+        });
+        const overlay = svgElement("svg", { class: "overlay", "aria-hidden": "true" });
+        drawOverlay(overlay, banner);
+
+        const frame = htmlElement("div", {
+          class: "measure-frame",
+          style: `width: ${displayWidth}px; height: ${displayHeight}px;`,
+        }, [image, overlay]);
+
+        const caption = htmlElement("div", { class: "measure-caption" }, [
+          htmlElement("strong", { text: banner.name }),
+          htmlElement("span", { text: ` · ${banner.width} × ${banner.height}, shown at ${banner.displayScale}×` }),
+        ]);
+
+        container.append(htmlElement("div", { class: "measure" }, [
+          caption,
+          htmlElement("div", { class: "measure-scroll" }, [frame]),
+        ]));
+      }
+
+      document.getElementById("toggle-overlays").addEventListener("change", (event) => {
+        container.classList.toggle("overlays-off", !event.target.checked);
+      });
+    }
+
+    function updateThemedImages() {
+      const theme = currentTheme();
+      for (const image of document.querySelectorAll("img[data-banner]")) {
+        image.src = bannerImageUrl(image.dataset.banner, theme, {
+          stillCursor: image.dataset.stillCursor === "true",
+        });
+      }
+    }
+
+
+    /* ==========================================================
+       Theme switch: Auto follows the system; the choice is
+       remembered in this browser only
+       ========================================================== */
+
+    const THEME_KEY = "banner-guide.theme";
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function currentTheme() {
+      const chosen = document.documentElement.dataset.theme;
+      if (chosen) {
+        return chosen;
+      }
+      return systemDark.matches ? "dark" : "light";
+    }
+
+    function applyTheme(choice) {
+      if (choice === "light" || choice === "dark") {
+        document.documentElement.dataset.theme = choice;
+      } else {
+        delete document.documentElement.dataset.theme;
+        choice = "auto";
+      }
+
+      for (const button of document.querySelectorAll("[data-theme-choice]")) {
+        button.setAttribute("aria-pressed", String(button.dataset.themeChoice === choice));
+      }
+
+      updateThemedImages();
+    }
+
+    function setUpThemeSwitch() {
+      let saved = "auto";
+      try {
+        saved = localStorage.getItem(THEME_KEY) || "auto";
+      } catch (error) {
+        // Storage can be unavailable (private windows, blocked site data)
+      }
+
+      for (const button of document.querySelectorAll("[data-theme-choice]")) {
+        button.addEventListener("click", () => {
+          const choice = button.dataset.themeChoice;
+          try {
+            localStorage.setItem(THEME_KEY, choice);
+          } catch (error) {
+            // Not remembered, but still applied
+          }
+          applyTheme(choice);
+        });
+      }
+
+      systemDark.addEventListener("change", updateThemedImages);
+      applyTheme(saved);
+    }
+
+
+    /* ==========================================================
+       Copy a hex value when its button is clicked
+       ========================================================== */
+
+    function setUpCopyButtons() {
+      for (const button of document.querySelectorAll("[data-copy]")) {
+        button.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(button.dataset.copy);
+            button.textContent = "Copied";
+          } catch (error) {
+            button.textContent = "Copy failed";
+          }
+          setTimeout(() => {
+            button.textContent = button.dataset.copy;
+          }, 1200);
+        });
+      }
+    }
+
+
+    /* ==========================================================
+       Type specimen: a leader line from the end of each sample
+       line to its label, placed after the text is measured
+       ========================================================== */
+
+    const SPECIMEN_LABELS = [
+      { sample: "sample-prompt",  title: "Prompt",  spec: "13px · monospace 400 · tracking 1" },
+      { sample: "sample-name",    title: "Name",    spec: "28px · sans-serif 700 · tracking −0.3" },
+      { sample: "sample-role",    title: "Role",    spec: "16px · sans-serif 500 · tracking 0.2" },
+      { sample: "sample-tagline", title: "Tagline", spec: "13px · monospace 400 · tracking 0" },
+    ];
+
+    function drawSpecimenLabels() {
+      const svg = document.getElementById("specimen");
+      const group = document.getElementById("specimen-labels");
+      group.replaceChildren();
+
+      const height = 300;
+      const boxes = SPECIMEN_LABELS.map((item) => document.getElementById(item.sample).getBBox());
+      const textRight = Math.max(...boxes.map((box) => box.x + box.width));
+
+      // Every leader runs flat to bendX, angles to its label's height,
+      // then runs flat into the label column at labelX
+      const bendX = textRight + 28;
+      const labelX = bendX + 96;
+      const width = Math.ceil(labelX + 230);
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      svg.setAttribute("width", width);
+      svg.style.maxWidth = `${width}px`;
+
+      SPECIMEN_LABELS.forEach((item, index) => {
+        const box = boxes[index];
+        const lineY = box.y + box.height / 2;
+        const start = box.x + box.width + 10;
+
+        // Labels are spread evenly over the full height of the figure
+        const labelY = (height * (index + 0.5)) / SPECIMEN_LABELS.length;
+
+        const leader = svgElement("polyline", {
+          class: "leader",
+          points: [
+            [start, lineY],
+            [bendX, lineY],
+            [labelX - 40, labelY],
+            [labelX - 10, labelY],
+          ].join(" "),
+        });
+
+        const title = svgElement("text", { class: "label-title", x: labelX, y: labelY - 3 });
+        title.textContent = item.title;
+
+        const spec = svgElement("text", { class: "label-spec", x: labelX, y: labelY + 14 });
+        spec.textContent = item.spec;
+
+        group.append(
+          svgElement("circle", { class: "leader-dot", cx: start, cy: lineY, r: 2.5 }),
+          leader,
+          title,
+          spec,
+        );
+      });
+    }
+
+
+    /* ==========================================================
+       Start
+       ========================================================== */
+
+    renderVariantPreviews();
+    drawSpecimenLabels();
+    document.fonts.ready.then(drawSpecimenLabels);
+    renderMeasurements();
+    setUpThemeSwitch();
+    setUpCopyButtons();
+  </script>
+
+</body>
+</html>
